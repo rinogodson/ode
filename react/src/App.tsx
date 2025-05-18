@@ -1,7 +1,10 @@
 import "./App.css";
+import Player from "./components/Player/Player";
 
 function App() {
-  return <>Hello World</>;
+  return <>
+    <Player />
+  </>;
 }
 
 export default App;
