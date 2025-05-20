@@ -1,15 +1,29 @@
 import * as LucideIcons from "lucide-react";
 import { useState } from "react";
-function Player() {
+function Player({
+  playpause_fn,
+  next_fn,
+  prev_fn,
+  time_stamp,
+}: {
+  playpause_fn: () => void;
+  next_fn: () => void;
+  prev_fn: () => void;
+  time_stamp: number;
+}) {
   const [playing, setPlaying] = useState(false);
   return (
     <div className="flex flex-col gap-8 bg-[#0b0b0b] w-180 h-120 rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
       <div className="bg-black w-full h-[10em] rounded-[calc(100px_-_2.5rem)] border-[1px] border-[rgba(255,255,255,0.1)]"></div>
       {/* button container */}
       <div className="h-full grid grid-cols-3 gap-2 place-items-center justify-center items-center">
-        <Button lucideString="SkipBack" clickAction={() => {}} scale={2} />
-        <Button lucideString={playing ? "Pause" : "Play"} clickAction={() => setPlaying(!playing)} scale={3} />
-        <Button lucideString="SkipForward" clickAction={() => {}} scale={2} />
+        <Button lucideString="SkipBack" clickAction={() => { }} scale={2} />
+        <Button
+          lucideString={playing ? "Pause" : "Play"}
+          clickAction={() => setPlaying(!playing)}
+          scale={3}
+        />
+        <Button lucideString="SkipForward" clickAction={() => { }} scale={2} />
       </div>
     </div>
   );
