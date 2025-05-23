@@ -1,22 +1,31 @@
 import * as LucideIcons from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import YouTubePlayer from "../YoutubePlayer/YoutubePlayer";
 function Player({
   playpause_fn,
   next_fn,
   prev_fn,
   volume,
   setVolume,
+  currentSong,
 }: {
   playpause_fn: () => void;
   next_fn: () => void;
   prev_fn: () => void;
   volume: number;
   setVolume: React.Dispatch<React.SetStateAction<number>>;
+  currentSong: string;
 }) {
   const [playing, setPlaying] = useState(false);
+  const volume_bar_ref = useRef(null);
+
   return (
     <div className="flex flex-col gap-8 bg-[#0b0b0b] w-180 h-120 rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
-      <div className="bg-black w-full h-[10em] rounded-[calc(100px_-_2.5rem)] border-[1px] border-[rgba(255,255,255,0.1)] flex justify-evenly items-center">
+      <div
+        ref={volume_bar_ref}
+        className="bg-black w-full h-[10em] rounded-[calc(100px_-_2.5rem)] border-[1px] border-[rgba(255,255,255,0.1)] flex justify-evenly items-center"
+      >
+        <YouTubePlayer/>
         {Array.from({ length: 10 }).map((_, i) => (
           <div
             key={i}
@@ -24,7 +33,11 @@ function Player({
           ></div>
         ))}
 
-        <VolumeBall volume={volume} setVolume={setVolume} />
+        <VolumeBall
+          parentRef={volume_bar_ref}
+          volume={volume}
+          setVolume={setVolume}
+        />
       </div>
       {/* button container */}
       <div className="h-full grid grid-cols-3 gap-2 place-items-center justify-center items-center">
@@ -80,15 +93,20 @@ export const Button = ({
 export const VolumeBall = ({
   volume,
   setVolume,
+  parentRef,
 }: {
   volume: number;
   setVolume: React.Dispatch<React.SetStateAction<number>>;
+  parentRef: React.RefObject<HTMLDivElement>;
 }) => {
   const [state, setState] = useState({
     x: 0,
     mx: 0,
     percent: 0,
   });
+
+  const [initialState, setInitialState] = useState(0);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     console.log(state);
@@ -98,23 +116,32 @@ export const VolumeBall = ({
 
   useEffect(() => {
     function handleMouseMove(e: MouseEvent) {
+      if (!dragging) return;
       setState({
         x: e.clientX,
         mx: e.clientX - 22.5,
-        percent: e.clientX*100/window.innerWidth,
+        percent:
+          (e.clientX * 100) /
+            (parentRef.current as HTMLElement).getClientRects()[0].width -
+          22.5,
       });
     }
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", () => setDragging(false));
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   });
-
   return (
     <div
       className="w-8 aspect-square rounded-full bg-white absolute shadow-[inset_0_0_10px_5px_rgba(0,0,0,0.5)]"
+      onMouseDown={(e) => {
+        e.preventDefault();
+        setInitialState(e.clientX - 22.5);
+        setDragging(true);
+      }}
       style={{
-        translate: `calc(((6.05em + ((32.85em / 100) * ${volume}))) - 22.5rem)`,
+        left: `${state.x}px`,
       }}
     ></div>
   );
