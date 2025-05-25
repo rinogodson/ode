@@ -16,8 +16,10 @@
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "styled-components": "^6.1.18",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.1.7",
+    "youtube-iframe-ctrl": "^1.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

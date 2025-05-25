@@ -1,58 +1,76 @@
 import * as LucideIcons from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import YouTubePlayer from "../YoutubePlayer/YoutubePlayer";
+import {
+  playFn,
+  pauseFn,
+  getState,
+  ytSetup,
+  getTime,
+} from "@/services/serviceProvider";
+import Slider from "../Slider/Slider";
+import React from "react";
 function Player({
-  playpause_fn,
   next_fn,
   prev_fn,
-  volume,
-  setVolume,
+  timestamp,
+  setTimestamp,
   currentSong,
+  yt_ref,
 }: {
-  playpause_fn: () => void;
   next_fn: () => void;
   prev_fn: () => void;
-  volume: number;
-  setVolume: React.Dispatch<React.SetStateAction<number>>;
+  timestamp: number;
+  setTimestamp: React.Dispatch<React.SetStateAction<number>>;
   currentSong: string;
+  yt_ref: React.RefObject<HTMLIFrameElement>;
 }) {
   const [playing, setPlaying] = useState(false);
-  const volume_bar_ref = useRef(null);
+  const time_bar_ref = useRef(null);
 
+  useEffect(() => {
+    ytSetup(yt_ref);
+  }, []);
+
+  useEffect(() => {
+    setTimestamp(getTime(yt_ref));
+  });
   return (
-    <div className="flex flex-col gap-8 bg-[#0b0b0b] w-180 h-120 rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
-      <div
-        ref={volume_bar_ref}
-        className="bg-black w-full h-[10em] rounded-[calc(100px_-_2.5rem)] border-[1px] border-[rgba(255,255,255,0.1)] flex justify-evenly items-center"
-      >
-        <YouTubePlayer/>
-        {Array.from({ length: 10 }).map((_, i) => (
-          <div
-            key={i}
-            className="w-[0.4em] bg-[rgba(255,255,255,0.1)] h-[calc(100%_-_2em)] rounded-full"
-          ></div>
-        ))}
-
-        <VolumeBall
-          parentRef={volume_bar_ref}
-          volume={volume}
-          setVolume={setVolume}
-        />
+    <>
+      <YouTubePlayer yt_ref={yt_ref} currentSong={currentSong} />
+      <div className="flex flex-col gap-8 bg-[#0f0f0f] w-180 h-120 rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
+        <div
+          ref={time_bar_ref}
+          className="bg-black w-full h-[10em] rounded-[calc(100px_-_2.5rem)] border-[1px] border-[rgba(255,255,255,0.1)] flex justify-evenly items-center"
+        >
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div
+              key={i}
+              className="w-[0.4em] bg-[rgba(255,255,255,0.1)] h-[calc(100%_-_2em)] rounded-full"
+            ></div>
+          ))}
+          <Slider
+            minimum={0}
+            maximum={100}
+            value={100}
+            onChangeFn={(e) => setTimestamp(e.target.value)}
+          />
+        </div>
+        {/* button container */}
+        <div className="h-full grid grid-cols-3 gap-2 place-items-center justify-center items-center">
+          <Button lucideString="SkipBack" clickAction={prev_fn} scale={2} />
+          <Button
+            lucideString={playing ? "Pause" : "Play"}
+            clickAction={() => {
+              setPlaying(!playing);
+              playing ? pauseFn(yt_ref) : playFn(yt_ref);
+            }}
+            scale={3}
+          />
+          <Button lucideString="SkipForward" clickAction={next_fn} scale={2} />
+        </div>
       </div>
-      {/* button container */}
-      <div className="h-full grid grid-cols-3 gap-2 place-items-center justify-center items-center">
-        <Button lucideString="SkipBack" clickAction={prev_fn} scale={2} />
-        <Button
-          lucideString={playing ? "Pause" : "Play"}
-          clickAction={() => {
-            setPlaying(!playing);
-            playpause_fn();
-          }}
-          scale={3}
-        />
-        <Button lucideString="SkipForward" clickAction={next_fn} scale={2} />
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -87,62 +105,5 @@ export const Button = ({
         size={(scale ?? 1) * 20}
       />
     </button>
-  );
-};
-
-export const VolumeBall = ({
-  volume,
-  setVolume,
-  parentRef,
-}: {
-  volume: number;
-  setVolume: React.Dispatch<React.SetStateAction<number>>;
-  parentRef: React.RefObject<HTMLDivElement>;
-}) => {
-  const [state, setState] = useState({
-    x: 0,
-    mx: 0,
-    percent: 0,
-  });
-
-  const [initialState, setInitialState] = useState(0);
-  const [dragging, setDragging] = useState(false);
-
-  useEffect(() => {
-    console.log(state);
-    setVolume(state.percent);
-    console.log(volume);
-  }, [state]);
-
-  useEffect(() => {
-    function handleMouseMove(e: MouseEvent) {
-      if (!dragging) return;
-      setState({
-        x: e.clientX,
-        mx: e.clientX - 22.5,
-        percent:
-          (e.clientX * 100) /
-            (parentRef.current as HTMLElement).getClientRects()[0].width -
-          22.5,
-      });
-    }
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", () => setDragging(false));
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  });
-  return (
-    <div
-      className="w-8 aspect-square rounded-full bg-white absolute shadow-[inset_0_0_10px_5px_rgba(0,0,0,0.5)]"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        setInitialState(e.clientX - 22.5);
-        setDragging(true);
-      }}
-      style={{
-        left: `${state.x}px`,
-      }}
-    ></div>
   );
 };
