@@ -1,13 +1,7 @@
 import * as LucideIcons from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import YouTubePlayer from "../YoutubePlayer/YoutubePlayer";
-import {
-  playFn,
-  pauseFn,
-  getState,
-  ytSetup,
-  getTime,
-} from "@/services/serviceProvider";
+import { playFn, pauseFn, ytSetup } from "@/services/serviceProvider";
 import Slider from "../Slider/Slider";
 import React from "react";
 function Player({
@@ -29,12 +23,28 @@ function Player({
   const time_bar_ref = useRef(null);
 
   useEffect(() => {
+    if (!yt_ref.current) return;
     ytSetup(yt_ref);
+
+    const handleTimeUpdate = (data: { current: number; total: number }) => {
+      setTimestamp(data);
+    };
+
+    yt_ref.current.addEventListener("ytmessage", (e: any) => {
+      const { info } = e.detail || {};
+      if (info?.progressState) {
+        handleTimeUpdate({
+          current: info.progressState.current,
+          total: info.progressState.duration,
+        });
+      }
+    });
+
+    yt_ref.current.addEventListener("ytstatechange", (e: any) => {
+      console.log(e.detail);
+    });
   }, []);
 
-  useEffect(() => {
-    setTimestamp(getTime(yt_ref));
-  });
   return (
     <>
       <YouTubePlayer yt_ref={yt_ref} currentSong={currentSong} />
@@ -51,8 +61,8 @@ function Player({
           ))}
           <Slider
             minimum={0}
-            maximum={100}
-            value={100}
+            maximum={timestamp.total}
+            value={timestamp.current}
             onChangeFn={(e) => setTimestamp(e.target.value)}
           />
         </div>
