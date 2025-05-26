@@ -20,7 +20,7 @@ const Slider = ({
         position: "absolute",
         alignItems: "center",
         justifyContent: "center",
-        width: "calc(45rem - 5rem - (80rem / 20))",
+        width: "calc(45px + 25.5rem)",
         translate: "0 3px",
       }}
     >
@@ -50,23 +50,20 @@ const StyledWrapper = styled.div`
     height: 15px;
     border-radius: 5px;
     outline: none;
-    opacity: 0.7;
+    opacity: 1;
     -webkit-transition: 0.2s;
-    cursor: ew-resize;
     transition: all 0.2s ease;
   }
-  .PB-range-slider:active {
-    height: 20px;
-  }
+  
 
   .PB-range-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 3em;
-    height: 3em;
-    border-radius: 50%;
-    background-color: #ffffff;
-    border: 3px solid #1b1b1b;
+    width: 0.4em;
+    height: 5em;
+    border-radius: 1000px;
+    background-color: rgba(200,0,0,1);
+    shadow: inset 0px 0px 10px 10px #000000;
     transition: all 0.3s ease;
   }
 
@@ -74,17 +71,10 @@ const StyledWrapper = styled.div`
     transition: 0.3s ease-in-out;
   }
   .PB-range-slider::-webkit-slider-thumb:active {
+    transform: scale(1.2);
     transition: 0.3s ease-in-out;
   }
 
-  .PB-range-slider::-moz-range-thumb {
-    width: 15px;
-    height: 25px;
-    border-radius: 5px;
-    background-color: #fff;
-    border: 2px solid #000;
-    cursor: ew-resize;
-  }
 `;
 
 export default Slider;
