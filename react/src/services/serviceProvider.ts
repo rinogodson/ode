@@ -22,4 +22,15 @@ const seekFn = (seconds: number) => {
   ytElement.command("seekTo", [seconds]);
 };
 
-export { playFn, pauseFn, ytSetup, getTitle, seekFn };
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds - minutes * 60);
+  return `${minutes}:${secs < 10 ? "0" + secs : secs}`;
+}
+
+const formatText = (text: string) => {
+  return text.slice(0, 38) + (text.length > 38 ? "..." : "");
+}
+
+export { playFn, pauseFn, ytSetup, getTitle, seekFn, formatTime, formatText };
+
