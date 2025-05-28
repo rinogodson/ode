@@ -22,8 +22,8 @@ function Player({
 }: {
   next_fn: () => void;
   prev_fn: () => void;
-  timestamp: number;
-  setTimestamp: React.Dispatch<React.SetStateAction<number>>;
+  timestamp: { current: number; total: number };
+  setTimestamp: React.Dispatch<React.SetStateAction<{ current: number; total: number }>>;
   currentSong: string;
   yt_ref: React.RefObject<HTMLIFrameElement>;
 }) {
@@ -121,7 +121,7 @@ function Player({
                     : "Music2"
             }
             clickAction={() => {
-              playState === "PLAYING" ? pauseFn(yt_ref) : playFn(yt_ref);
+              playState === "PLAYING" ? pauseFn() : playFn();
             }}
             scale={3}
           />

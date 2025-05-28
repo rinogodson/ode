@@ -1,5 +1,3 @@
-import { playFn } from "@/services/serviceProvider";
-import { useEffect } from "react";
 const YoutubePlayer = ({
   yt_ref,
   currentSong,
