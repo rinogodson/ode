@@ -58,7 +58,7 @@ function Player({
   return (
     <>
       <YouTubePlayer yt_ref={yt_ref} currentSong={currentSong} />
-      <div className="shadow-[inset_0px_-5px_50px_0px_rgba(0,0,0,0.8)] flex flex-col gap-4 h-139 bg-[#0f0f0f] rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
+      <div className="z-[1000] shadow-[inset_0px_-5px_50px_0px_rgba(0,0,0,0.8)] flex flex-col gap-4 h-139 bg-[#0f0f0f] rounded-[100px] border-[rgba(255,255,255,0.1)] border-[1px] p-10">
         <div className="flex justify-center gap-4 items-center">
           <button
             onClick={() => seekFn(timestamp.current - 10)}
