@@ -1,6 +1,6 @@
 import React from "react";
 export const FileDropPlate = ({ style }: { style?: string }) => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   return (
     <button
       onClick={() => setOpen(!open)}
@@ -9,9 +9,14 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
         transition: "transform 0.3s ease-in-out",
       }}
       className={
-        "flex justify-center items-start pt-16 text-[rgba(255,255,255,0.3)] shadow-[0_0_0px_1px_#1e1e1e,_inset_0_0_0px_1px_#1d1d1d,_inset_0_0_100px_10px_#000] bg-[#0f0f0f] border-[2em] border-[#0e0e0e] w-[30em] mr-[5em] h-[20em] rounded-[4em] " +
+        "shadow-[inset_0_0_10px_10px_rgba(0,0,0,0.3)] flex flex-col justify-start items-center text-[rgba(255,255,255,0.3)]  bg-[#0f0f0f] p-[2em] pt-0 w-[30em] mr-[6em] h-[20em] rounded-[4em] " +
         (style ?? "")
       }
-    >Drop The Card Here... </button>
+    >
+      <div className="mb-[1em] h-[1em]">___</div>
+      <div style={{fontFamily: `"Instrument Serif", serif`}} className="border-[0.1em] border-dashed border-[rgba(255,255,255,0.1)] shadow-[inset_0_0_100px_10px_#000,_0_0_7px_10px_rgba(0,0,0,0.3)] w-full h-full rounded-[2em] pt-[4em]">
+        Drop The Card Here...
+      </div>{" "}
+    </button>
   );
 };
