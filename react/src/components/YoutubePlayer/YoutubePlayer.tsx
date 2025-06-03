@@ -1,17 +1,19 @@
+import { LoadedCard } from "@/services/ContextService";
+import { useContext } from "react";
+
 const YoutubePlayer = ({
   yt_ref,
-  currentSong,
 }: {
   yt_ref: React.RefObject<HTMLIFrameElement>;
-  currentSong: string;
 }) => {
+  const {appContext, setAppContext} = useContext(LoadedCard) 
   return (
     <div>
       <iframe
         width="1"
         height="1"
         ref={yt_ref}
-        src={`https://www.youtube-nocookie.com/embed/${currentSong}?enablejsapi=1&autoplay=1&controls=1`}
+        src={`https://www.youtube-nocookie.com/embed?enablejsapi=1&autoplay=1&controls=1`}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         title="YouTube music player"
