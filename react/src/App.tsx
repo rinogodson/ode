@@ -57,9 +57,4 @@ function AppWithContext() {
   );
 }
 
-// TODO:
-// -- Move this ContextProvider to a different file
-// -- Update the sources in all theh files which uses the ContextProvider
-// -- Implement Antenna Light
-
 export default App;
