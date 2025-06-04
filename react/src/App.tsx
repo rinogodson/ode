@@ -5,8 +5,17 @@ import { useState } from "react";
 import { FileDropPlate } from "./components/ui/FileDropPlate/FileDropPlate";
 import Nav from "./components/Nav/Nav";
 import ContextProvider, { LoadedCard } from "./services/ContextService";
+import { CardPreview } from "./components/CardPreview/CardPreview";
 
 function App() {
+  return (
+    <ContextProvider>
+      <AppWithContext />
+    </ContextProvider>
+  );
+}
+
+function AppWithContext() {
   const yt_ref = useRef(null);
   const [timestamp, setTimestamp] = useState({
     current: 0,
@@ -17,14 +26,18 @@ function App() {
 
   return (
     <>
-      <ContextProvider>
+      <div className="select-none">
         <Nav />
+        <CardPreview />
         <div className="flex justify-center items-end flex-col">
           <FileDropPlate style="absolute" />
           <div className="self-start ml-[6em] flex flex-col items-center">
             <div
               style={{
-                background: appContext.playerState === "PLAYING" ? "green" : "red",
+                background:
+                  appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PAUSED" ? "#2b2b2b" : "#01E460",
+                boxShadow: `0 0 40px 3px ${appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PAUSED" ? "rgba(0,0,0,0)" : "#40FF32"}`, 
+                transition: "all 100ms ease"
               }}
               className="w-5  rounded-full transform-[translate(0,_1em)] aspect-square"
             ></div>
@@ -39,7 +52,7 @@ function App() {
             yt_ref={yt_ref}
           />
         </div>
-      </ContextProvider>
+      </div>
     </>
   );
 }

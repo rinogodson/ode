@@ -15,7 +15,7 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
       reader.onload = () => {
         const text = reader.result;
         const parsedText: typeof appContext.loadedCard = JSON.parse(text)
-        setAppContext((prev: typeof appContext) => ({...prev, ...parsedText}));
+        setAppContext((prev: typeof appContext) => ({...prev, currentTrack: 0, ...parsedText}));
       };
       reader.readAsText(file);
     });

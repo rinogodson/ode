@@ -25,14 +25,11 @@ function Player({
   >;
   yt_ref: React.RefObject<HTMLIFrameElement>;
 }) {
-  const [playState, setPlayState] = useState("PAUSED");
   const time_bar_ref = useRef(null);
 
   const { appContext, setAppContext } = React.useContext(LoadedCard);
 
   useEffect(() => {
-    console.log(appContext);
-
     if (!yt_ref.current) return;
     ytSetup(yt_ref);
     ytElement.command("loadVideoById", [
@@ -53,8 +50,10 @@ function Player({
     });
 
     yt_ref.current.addEventListener("ytstatechange", (e: any) => {
-      console.log(e.detail);
-      setPlayState(e.detail);
+      setAppContext((prev: typeof appContext) => ({
+        ...prev,
+        playerState: e.detail,
+      }));
       getTitle();
     });
   }, []);
@@ -87,6 +86,27 @@ function Player({
       };
     });
   };
+
+  const [barValues, setBarValues] = useState([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
+
+  useEffect(() => {
+    if (appContext.playerState === "PLAYING") {
+      const interval = setInterval(() => {
+        setBarValues((prevValues) => prevValues.map(() => Math.random()));
+      }, 200);
+
+      return () => clearInterval(interval);
+    } else {
+      setBarValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    }
+    console.log(appContext.playerState);
+    if(appContext.playerState === "ENDED"){
+      next_fn()
+    }
+  }, [appContext.playerState]);
+
   return (
     <>
       <YouTubePlayer yt_ref={yt_ref} />
@@ -110,8 +130,17 @@ function Player({
             {Array.from({ length: 14 }).map((_, i) => (
               <div
                 key={i}
-                className="w-[0.4em] mx-3 bg-[rgba(255,255,255,0.1)] h-[calc(100%_-_2em)] rounded-full"
-              ></div>
+                className="flex items-end w-[0.4em] mx-3  h-[calc(100%_-_2em)] rounded-full bg-[rgba(255,255,255,0.1)]"
+              >
+                <div
+                  style={{
+                    height: `${Math.floor(barValues[i] * 100)}%`,
+                    background: "rgba(255, 255, 255, 0.08)",
+                    transition: "all 750ms",
+                  }}
+                  className="w-full rounded-full"
+                ></div>
+              </div>
             ))}
             <Slider
               minimum={0}
@@ -156,6 +185,7 @@ function Player({
           >
             {formatText(
               appContext.loadedCard.songs[appContext.currentTrack].title,
+              38,
             )}
           </p>
           <div className="[grid-area:_1_/_2_/_3_/_3]">
@@ -169,16 +199,16 @@ function Player({
           <Button lucideString="SkipBack" clickAction={prev_fn} scale={2.3} />
           <Button
             lucideString={
-              playState === "PLAYING"
+              appContext.playerState === "PLAYING"
                 ? "Pause"
-                : playState === "PAUSED"
+                : appContext.playerState === "PAUSED"
                   ? "Music2"
-                  : playState === "BUFFERING"
+                  : appContext.playerState === "BUFFERING"
                     ? "Loader"
                     : "Music2"
             }
             clickAction={() => {
-              playState === "PLAYING" ? pauseFn() : playFn();
+              appContext.playerState === "PLAYING" ? pauseFn() : playFn();
             }}
             scale={3}
           />

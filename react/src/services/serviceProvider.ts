@@ -30,8 +30,8 @@ const formatTime = (seconds: number) => {
   return `${minutes}:${secs < 10 ? "0" + secs : secs}`;
 };
 
-const formatText = (text: string) => {
-  return text.slice(0, 38) + (text.length > 38 ? "..." : "");
+const formatText = (text: string, limit: number) => {
+  return text.slice(0, limit) + (text.length > limit ? "..." : "");
 };
 
 export {
