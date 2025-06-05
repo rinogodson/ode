@@ -1,12 +1,8 @@
-import { LoadedCard } from "@/services/ContextService";
-import { useContext } from "react";
-
 const YoutubePlayer = ({
   yt_ref,
 }: {
   yt_ref: React.RefObject<HTMLIFrameElement>;
 }) => {
-  const {appContext, setAppContext} = useContext(LoadedCard) 
   return (
     <div>
       <iframe

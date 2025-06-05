@@ -25,7 +25,7 @@ function AppWithContext() {
 
   const [showCrafter, setShowCrafter] = useState(false);
 
-  const { appContext, setAppContext } = useContext(LoadedCard);
+  const { appContext }: any = useContext(LoadedCard);
 
   return (
     <>

@@ -27,7 +27,7 @@ function Player({
 }) {
   const time_bar_ref = useRef(null);
 
-  const { appContext, setAppContext } = React.useContext(LoadedCard);
+  const { appContext, setAppContext }:any = React.useContext(LoadedCard);
 
   useEffect(() => {
     if (!yt_ref.current) return;

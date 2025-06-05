@@ -4,7 +4,7 @@ import {
   fetchYouTubeTitle,
   formatText,
 } from "@/services/serviceProvider";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   AArrowDown,
   ArrowDown,

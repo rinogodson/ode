@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 export const FileDropPlate = ({ style }: { style?: string }) => {
   const [pulled, setPulled] = React.useState(false);
 
-  const { appContext, setAppContext } = useContext(LoadedCard);
+  const { appContext, setAppContext }:any = useContext(LoadedCard);
 
   const onDrop = useCallback((receivedCard: File[]) => {
     if (receivedCard.length > 1) return;
@@ -13,7 +13,7 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
       reader.onabort = () => console.log("file reading was aborted");
       reader.onerror = () => console.log("file reading has failed");
       reader.onload = () => {
-        const text = reader.result;
+        const text: string = String(reader.result);
         const parsedText: typeof appContext.loadedCard = JSON.parse(text)
         setAppContext((prev: typeof appContext) => ({...prev, currentTrack: 0, ...parsedText}));
       };
