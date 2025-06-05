@@ -2,10 +2,43 @@ import YouTubeIFrameCtrl from "youtube-iframe-ctrl";
 
 let ytElement: YouTubeIFrameCtrl;
 
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 const ytSetup = (yt_ref: React.RefObject<HTMLIFrameElement>) => {
   ytElement = new YouTubeIFrameCtrl(yt_ref.current);
   //  ytElement.command("loadVideoById", [appContext.loadedCard.songs[appContext.currentTrack].id])
   //
+};
+
+const fetchYouTubeTitle = async (link: string)=>{
+  const url = `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${link}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    console.log(json);
+    
+    const title = json.title;
+    console.log(title);
+    return title 
+  } catch (error) {
+    console.error(error.message);
+    return ""
+  }
 };
 
 const playFn = () => {
@@ -43,4 +76,6 @@ export {
   formatTime,
   formatText,
   ytElement,
+  fetchYouTubeTitle,
+  download
 };

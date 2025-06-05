@@ -35,6 +35,7 @@ function Player({
     ytElement.command("loadVideoById", [
       appContext.loadedCard.songs[appContext.currentTrack].id,
     ]);
+    
 
     const handleTimeUpdate = (data: { current: number; total: number }) => {
       setTimestamp(data);

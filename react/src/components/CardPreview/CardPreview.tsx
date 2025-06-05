@@ -30,7 +30,7 @@ export const CardPreview = () => {
               background: "#3E3F76",
               filter: `hue-rotate(${appContext.loadedCard.title.length * 10}deg)`,
             }}
-            className="h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
+            className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
           >
             <p
               className="max-w-[10ch] flex w-full h-full justify-start items-end text-[1.1em]"
@@ -62,6 +62,7 @@ export const CardPreview = () => {
               (song: { title: string; id: string }, index: number) => {
                 return (
                   <div
+                    key={index+"prev"}
                     onClick={() => {
                       setAppContext((prev: typeof appContext) => ({
                         ...prev,

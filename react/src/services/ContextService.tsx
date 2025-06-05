@@ -23,22 +23,6 @@ function ContextProvider({ children }: { children: React.ReactNode }) {
           title: "Tidal Wave",
           id: "SPTX--TNTis",
         },
-        {
-          title: "Tidal Wave",
-          id: "SPTX--TNTis",
-        },
-        {
-          title: "Tidal Wave",
-          id: "SPTX--TNTis",
-        },
-        {
-          title: "Tidal Wave",
-          id: "SPTX--TNTis",
-        },
-        {
-          title: "Tidal Wave",
-          id: "SPTX--TNTis",
-        },
       ],
     },
   });
