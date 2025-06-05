@@ -337,7 +337,7 @@ const CardPreviewCardCrafter = ({
   crafterContext: any;
 }) => {
   const [rotation, setRotation] = useState(0);
-  const { appContext, setAppContext } = useContext(LoadedCard);
+  const { appContext, setAppContext }:any = useContext(LoadedCard);
   return (
     <>
       <div
