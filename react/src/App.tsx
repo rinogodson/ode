@@ -33,7 +33,7 @@ function AppWithContext() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.outerWidth < 1024);
+      setIsMobile(window.outerWidth < 600);
     };
 
     handleResize();
