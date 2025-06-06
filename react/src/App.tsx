@@ -1,5 +1,5 @@
 import "./App.css";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import Player from "./components/Player/Player";
 import { useState } from "react";
 import { FileDropPlate } from "./components/ui/FileDropPlate/FileDropPlate";
@@ -28,6 +28,33 @@ function AppWithContext() {
 
   const { appContext }: any = useContext(LoadedCard);
 
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.outerWidth < 1024);
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  if (isMobile) {
+    return (
+      <>
+        <LoadingScreen>
+          <p>USE A DESKTOP NO PHONES ALLOWED!</p>
+        </LoadingScreen>
+      </>
+    );
+  }
+
   return (
     <>
       {showCrafter && <CardCrafter setShowCrafter={setShowCrafter} />}
@@ -42,7 +69,10 @@ function AppWithContext() {
 
         <button
           onClick={() => {
-            window.open("https://www.youtube.com/watch?v=yz4N4c0Sx0U", "_blank");            
+            window.open(
+              "https://www.youtube.com/watch?v=yz4N4c0Sx0U",
+              "_blank",
+            );
           }}
           className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
         >
@@ -51,7 +81,14 @@ function AppWithContext() {
         <CardPreview />
         {!showCrafter && (
           <div className="flex justify-center items-end flex-col">
-            {appContext.playerState === "CUED" && <LoadingScreen />}
+            {appContext.playerState === "CUED" && (
+              <LoadingScreen>
+                <p>
+                  Loading... Pls wait... <br /> (maybe it's your internet speed,
+                  bruh...) <br /> TIP: Just reload 5-6 times...
+                </p>
+              </LoadingScreen>
+            )}
             <FileDropPlate style="absolute" />
             <div className="self-start ml-[6em] flex flex-col items-center">
               <div
