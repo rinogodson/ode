@@ -3,7 +3,6 @@ import {
   download,
   fetchYouTubeTitle,
   formatText,
-  pauseFn,
 } from "@/services/serviceProvider";
 import { motion } from "framer-motion";
 import {
