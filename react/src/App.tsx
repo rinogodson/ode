@@ -28,7 +28,6 @@ function AppWithContext() {
 
   const { appContext }: any = useContext(LoadedCard);
 
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -38,10 +37,10 @@ function AppWithContext() {
 
     handleResize();
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -50,6 +49,18 @@ function AppWithContext() {
       <>
         <LoadingScreen>
           <p>USE A DESKTOP NO PHONES ALLOWED!</p>
+
+          <button
+            onClick={() => {
+              window.open(
+                "https://www.youtube.com/watch?v=yz4N4c0Sx0U",
+                "_blank",
+              );
+            }}
+            className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+          >
+            Watch The DEMO Instead
+          </button>
         </LoadingScreen>
       </>
     );
