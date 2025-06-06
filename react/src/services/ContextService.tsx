@@ -10,7 +10,7 @@ function ContextProvider({ children }: { children: React.ReactNode }) {
     playerState: "CUED",
     currentTrack: 0,
     loadedCard: {
-      title: "Ride Music Going to moon",
+      title: "Default Card",
       songs: [
         {
           title: "Line Without a Hook",

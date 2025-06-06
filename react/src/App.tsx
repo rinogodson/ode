@@ -7,6 +7,7 @@ import Nav from "./components/Nav/Nav";
 import ContextProvider, { LoadedCard } from "./services/ContextService";
 import { CardPreview } from "./components/CardPreview/CardPreview";
 import CardCrafter from "./components/CardPreview/CardCrafter/CardCrafter";
+import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 
 function App() {
   return (
@@ -38,9 +39,19 @@ function AppWithContext() {
         >
           Create Card
         </button>
+
+        <button
+          onClick={() => {
+            window.open("https://youtu.be/dQw4w9WgXcQ", "_blank");            
+          }}
+          className="absolute top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+        >
+          Watch The DEMO Instead
+        </button>
         <CardPreview />
         {!showCrafter && (
           <div className="flex justify-center items-end flex-col">
+            {appContext.playerState === "CUED" && <LoadingScreen />}
             <FileDropPlate style="absolute" />
             <div className="self-start ml-[6em] flex flex-col items-center">
               <div
@@ -48,10 +59,12 @@ function AppWithContext() {
                   background:
                     appContext.playerState === "BUFFERING"
                       ? "orange"
-                      : appContext.playerState === "PAUSED"
-                        ? "#2b2b2b"
-                        : "#01E460",
-                  boxShadow: `0 0 40px 3px ${appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PAUSED" ? "rgba(0,0,0,0)" : "#40FF32"}`,
+                      : appContext.playerState === "PLAYING"
+                        ? "#01E460"
+                        : appContext.playerState === "CUED"
+                          ? "#ff0000"
+                          : "#2b2b2b",
+                  boxShadow: `0 0 40px 3px ${appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PLAYING" ? "#40FF32" : appContext.playerState === "CUED" ? "red" : "rgba(0,0,0,0)"}`,
                   transition: "all 100ms ease",
                 }}
                 className="w-5  rounded-full transform-[translate(0,_1em)] aspect-square"

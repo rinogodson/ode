@@ -3,6 +3,7 @@ import {
   download,
   fetchYouTubeTitle,
   formatText,
+  pauseFn,
 } from "@/services/serviceProvider";
 import { motion } from "framer-motion";
 import {
@@ -142,6 +143,8 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                     `${crafterContext.inputCard.title}.card`,
                     jsonstring,
                   );
+                  
+                  setShowCrafter(false);
                 }}
                 className="active:scale-[0.95] transition-[all_300ms] border-green-700 border-1 bg-green-950 rounded-2xl font-bold text-white  w-full h-full"
               >
