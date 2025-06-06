@@ -44,7 +44,7 @@ function AppWithContext() {
           onClick={() => {
             window.open("https://youtu.be/dQw4w9WgXcQ", "_blank");            
           }}
-          className="absolute top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+          className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
         >
           Watch The DEMO Instead
         </button>
