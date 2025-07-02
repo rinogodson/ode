@@ -1,3 +1,4 @@
+import ColorChangeOption from "@/components/ColorChangeOption/ColorChangeOption";
 import { LoadedCard } from "@/services/ContextService";
 import {
   download,
@@ -93,7 +94,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
       transition={{ duration: 0.5 }}
       className="flex justify-center items-center w-screen h-screen absolute top-0 left-0 bg-[rgba(0,0,0,0.5)] z-10000 backdrop-blur-[20px]"
     >
-      <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_5fr] p-5 gap-5">
+      <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_7fr] p-5 gap-5">
         <div
           id="titlesection"
           className={`w-full h-full flex justify-center items-center [grid-area:1/1/2/2] ${sectionStyles}`}
@@ -116,8 +117,9 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
         </div>
         <div
           id="currentcard"
-          className={`w-full h-full flex flex-col justify-end overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
+          className={`w-full h-full flex flex-col justify-between overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
         >
+          <ColorChangeOption />
           <CardPreviewCardCrafter crafterContext={crafterContext} />
           <div
             id="btncont"
@@ -354,7 +356,7 @@ const CardPreviewCardCrafter = ({
       <div
         className="cursor-pointer grid relative grid-cols-1 grid-rows-[10em_1px_1fr]  w-[12em]"
         style={{
-          bottom: rotation == 0 ? "4em" : "-3em",
+          bottom: rotation == 0 ? "-1em" : "-7em",
           transition: "all 0.65s cubic-bezier(0.77, 0, 0.175, 1)",
         }}
       >
