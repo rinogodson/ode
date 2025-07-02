@@ -16,7 +16,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 
 function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
-  const [crafterContext, setCrafterContext] = useState({
+  const [crafterContext, setCrafterContext]: [{link: string | null, title: string, inputCard: any}, Function] = useState({
     link: "",
     title: "",
     inputCard: {
@@ -29,7 +29,10 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     console.log(crafterContext);
   }, [crafterContext]);
 
-  const getID = (url: string) => {
+  const getID = (url: string | null) => {
+    if (typeof url !== "string") {
+      return null;
+    }
     url = url.trim();
     let match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
     if (match) {
@@ -54,7 +57,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     return null;
   };
 
-  function valid(url) {
+  function valid(url: string | null) {
     if (!url || typeof url !== "string") {
       return false;
     }
@@ -159,7 +162,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
               id="list"
               className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-y-scroll"
             >
-              {crafterContext.inputCard.songs.map((song, index) => {
+              {crafterContext.inputCard.songs.map((song:any, index:any) => {
                 return (
                   <ListComponent
                     index={index}
@@ -179,7 +182,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                 placeholder="Enter the link here"
                 type="text"
                 className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:1/1/2/2]"
-                value={crafterContext.link}
+                value={String(crafterContext.link)}
                 onChange={(e) => {
                   setCrafterContext({
                     ...crafterContext,
@@ -228,7 +231,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
               <button
                 onClick={async () => {
                   const title = await fetchYouTubeTitle(
-                    getID(crafterContext.link),
+                    String(getID(crafterContext.link)),
                   );
                   if (title) {
                     setCrafterContext({

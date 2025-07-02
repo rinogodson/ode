@@ -1,8 +1,9 @@
+import type React from "react";
 import YouTubeIFrameCtrl from "youtube-iframe-ctrl";
 
 let ytElement: YouTubeIFrameCtrl;
 
-function download(filename, text) {
+function download(filename: string, text: string) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
@@ -15,7 +16,8 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-const ytSetup = (yt_ref: React.RefObject<HTMLIFrameElement>) => {
+const ytSetup = (yt_ref: React.RefObject<HTMLIFrameElement> | React.RefObject<null>) => {
+  if (!yt_ref.current) return;
   ytElement = new YouTubeIFrameCtrl(yt_ref.current);
   //  ytElement.command("loadVideoById", [appContext.loadedCard.songs[appContext.currentTrack].id])
   //
@@ -35,7 +37,7 @@ const fetchYouTubeTitle = async (link: string)=>{
     const title = json.title;
     console.log(title);
     return title 
-  } catch (error) {
+  } catch (error: any) {
     console.error(error.message);
     return ""
   }

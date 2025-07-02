@@ -3,8 +3,9 @@ import { useState, createContext } from "react";
 // @ts-ignore
 export const LoadedCard = createContext({
   appContext: {},
-  setAppContext: {}
+  setAppContext: {},
 });
+
 function ContextProvider({ children }: { children: React.ReactNode }) {
   const [appContext, setAppContext]: any = useState({
     playerState: "CUED",

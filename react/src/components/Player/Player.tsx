@@ -23,11 +23,11 @@ function Player({
   setTimestamp: React.Dispatch<
     React.SetStateAction<{ current: number; total: number }>
   >;
-  yt_ref: React.RefObject<HTMLIFrameElement>;
+  yt_ref: any;
 }) {
   const time_bar_ref = useRef(null);
 
-  const { appContext, setAppContext }:any = React.useContext(LoadedCard);
+  const { appContext, setAppContext }: any = React.useContext(LoadedCard);
 
   useEffect(() => {
     if (!yt_ref.current) return;
@@ -35,7 +35,6 @@ function Player({
     ytElement.command("loadVideoById", [
       appContext.loadedCard.songs[appContext.currentTrack].id,
     ]);
-    
 
     const handleTimeUpdate = (data: { current: number; total: number }) => {
       setTimestamp(data);
@@ -68,7 +67,7 @@ function Player({
   }, [appContext.currentTrack, appContext.loadedCard]);
 
   const prev_fn = () => {
-    setAppContext((prev) => {
+    setAppContext((prev: any) => {
       const newIndex = Math.max(prev.currentTrack - 1, 0);
       return {
         ...prev,
@@ -78,7 +77,7 @@ function Player({
   };
 
   const next_fn = () => {
-    setAppContext((prev) => {
+    setAppContext((prev: any) => {
       const maxIndex = prev.loadedCard.songs.length - 1;
       const newIndex = Math.min(prev.currentTrack + 1, maxIndex);
       return {
@@ -103,8 +102,8 @@ function Player({
       setBarValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
     console.log(appContext.playerState);
-    if(appContext.playerState === "ENDED"){
-      next_fn()
+    if (appContext.playerState === "ENDED") {
+      next_fn();
     }
   }, [appContext.playerState]);
 
