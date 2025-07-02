@@ -58,7 +58,7 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
           : "Drop the cards here, or click to browse"}
         <button
           onClick={open}
-          className="px-2 py-1 rounded-[10px] bg-gray-700 w-fit"
+          className="px-2 py-1 rounded-[10px] bg-gray-700 w-fit cursor-pointer"
         >
           Browse
         </button>

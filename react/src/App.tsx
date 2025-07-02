@@ -100,7 +100,7 @@ function AppWithContext() {
                 </p>
               </LoadingScreen>
             )}
-            <FileDropPlate style="absolute" />
+            <FileDropPlate style="absolute cursor-grab" />
             <div className="self-start ml-[6em] flex flex-col items-center">
               <div
                 style={{

@@ -54,7 +54,6 @@ const StyledWrapper = styled.div`
     -webkit-transition: 0.2s;
     transition: all 0.2s ease;
   }
-  
 
   .PB-range-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -62,8 +61,13 @@ const StyledWrapper = styled.div`
     width: 0.4em;
     height: 5em;
     border-radius: 1000px;
-    background-color: rgba(200,0,0,1);
     shadow: inset 0px 0px 10px 10px #000000;
+    background: #8c0b0b;
+    background: linear-gradient(
+      90deg,
+      rgba(140, 11, 11, 1) 0%,
+      rgba(207, 8, 8, 1) 100%
+    );
     transition: all 0.3s ease;
   }
 
@@ -74,7 +78,6 @@ const StyledWrapper = styled.div`
     transform: scale(1.2);
     transition: 0.3s ease-in-out;
   }
-
 `;
 
 export default Slider;

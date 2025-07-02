@@ -16,7 +16,15 @@ import {
 import { useContext, useEffect, useState } from "react";
 
 function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
-  const [crafterContext, setCrafterContext]: [{link: string | null, title: string, inputCard: any}, Function] = useState({
+  const style = {
+    buttonStyle:
+      "bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center transition-[all_100ms] active:scale-[0.9] hover:bg-[#2b2b2b] hover:scale-[0.99] cursor-pointer",
+  };
+
+  const [crafterContext, setCrafterContext]: [
+    { link: string | null; title: string; inputCard: any },
+    Function,
+  ] = useState({
     link: "",
     title: "",
     inputCard: {
@@ -78,176 +86,173 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
   const sectionStyles =
     "bg-[#131313] border-[0.1px] border-[rgba(255,255,255,0.08)] rounded-[0.75em]";
   return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex justify-center items-center w-screen h-screen absolute top-0 left-0 bg-[rgba(0,0,0,0.5)] z-10000 backdrop-blur-[20px]"
-      >
-        <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_5fr] p-5 gap-5">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex justify-center items-center w-screen h-screen absolute top-0 left-0 bg-[rgba(0,0,0,0.5)] z-10000 backdrop-blur-[20px]"
+    >
+      <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_5fr] p-5 gap-5">
+        <div
+          id="titlesection"
+          className={`w-full h-full flex justify-center items-center [grid-area:1/1/2/2] ${sectionStyles}`}
+        >
+          <input
+            type="text"
+            placeholder="Enter Title"
+            className="w-full h-full p-5 text-[3em] outline-none"
+            value={crafterContext.inputCard.title}
+            onChange={(e) => {
+              setCrafterContext({
+                ...crafterContext,
+                inputCard: {
+                  ...crafterContext.inputCard,
+                  title: e.target.value,
+                },
+              });
+            }}
+          />
+        </div>
+        <div
+          id="currentcard"
+          className={`w-full h-full flex flex-col justify-end overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
+        >
+          <CardPreviewCardCrafter crafterContext={crafterContext} />
           <div
-            id="titlesection"
-            className={`w-full h-full flex justify-center items-center [grid-area:1/1/2/2] ${sectionStyles}`}
+            id="btncont"
+            className="h-[5em] p-3 gap-3 w-full flex items-center justify-center"
           >
-            <input
-              type="text"
-              placeholder="Enter Title"
-              className="w-full h-full p-5 text-[3em] outline-none"
-              value={crafterContext.inputCard.title}
-              onChange={(e) => {
-                setCrafterContext({
-                  ...crafterContext,
-                  inputCard: {
-                    ...crafterContext.inputCard,
-                    title: e.target.value,
-                  },
-                });
+            <button
+              onClick={() => {
+                setShowCrafter(false);
               }}
-            />
-          </div>
-          <div
-            id="currentcard"
-            className={`w-full h-full flex flex-col justify-end overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
-          >
-            <CardPreviewCardCrafter crafterContext={crafterContext} />
-            <div
-              id="btncont"
-              className="h-[5em] p-3 gap-3 w-full flex items-center justify-center"
+              className={`${style.buttonStyle} w-full h-full text-white font-bold`}
             >
-              <button
-                onClick={() => {
-                  setShowCrafter(false);
-                }}
-                className="active:scale-[0.95] transition-[all_300ms] border-red-700 border-1 bg-red-950 rounded-2xl font-bold text-white w-full h-full"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (
-                    !crafterContext.inputCard.title ||
-                    crafterContext.inputCard.songs.length === 0
-                  ) {
-                    window.alert(
-                      "Please enter a title and add at least one song",
-                    );
-                    return;
-                  }
-                  const jsonstring = `
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (
+                  !crafterContext.inputCard.title ||
+                  crafterContext.inputCard.songs.length === 0
+                ) {
+                  window.alert(
+                    "Please enter a title and add at least one song",
+                  );
+                  return;
+                }
+                const jsonstring = `
 {
     "loadedCard": {
       "title": "${crafterContext.inputCard.title}",  
       "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
 }
 `;
-                  download(
-                    `${crafterContext.inputCard.title}.card`,
-                    jsonstring,
-                  );
-                  
-                  setShowCrafter(false);
-                }}
-                className="active:scale-[0.95] transition-[all_300ms] border-green-700 border-1 bg-green-950 rounded-2xl font-bold text-white  w-full h-full"
-              >
-                Download
-              </button>
-            </div>
-          </div>
-          <div
-            id="songcreationsection"
-            className={`grid grid-cols-1 p-5 gap-3 grid-rows-[1fr_10em] w-full h-full [grid-area:1/2/3/3] ${sectionStyles}`}
-          >
-            <div
-              id="list"
-              className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-y-scroll"
+                download(`${crafterContext.inputCard.title}.card`, jsonstring);
+
+                setShowCrafter(false);
+              }}
+              className={`${style.buttonStyle} w-full h-full text-white font-bold`}
             >
-              {crafterContext.inputCard.songs.map((song:any, index:any) => {
-                return (
-                  <ListComponent
-                    index={index}
-                    key={index}
-                    name={song.title}
-                    setFn={setCrafterContext}
-                    crafterContext={crafterContext}
-                  />
-                );
-              })}
-            </div>
-            <div
-              id="input"
-              className="grid gap-3 grid-rows-[1fr_1fr] grid-cols-[1fr_5em]"
-            >
-              <input
-                placeholder="Enter the link here"
-                type="text"
-                className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:1/1/2/2]"
-                value={String(crafterContext.link)}
-                onChange={(e) => {
-                  setCrafterContext({
-                    ...crafterContext,
-                    link: e.target.value,
-                  });
-                }}
-              />
-              <input
-                placeholder="Title... you can fetch it >>>"
-                type="text"
-                className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:2/1/3/2]"
-                value={crafterContext.title}
-                onChange={(e) => {
-                  setCrafterContext({
-                    ...crafterContext,
-                    title: e.target.value,
-                  });
-                }}
-              />
-              <button
-                onClick={() => {
-                  if (!valid(crafterContext.link) || !crafterContext.title) {
-                    window.alert("Invalid Link / No Title");
-                    return;
-                  }
-                  setCrafterContext({
-                    ...crafterContext,
-                    link: "",
-                    title: "",
-                    inputCard: {
-                      ...crafterContext.inputCard,
-                      songs: [
-                        ...crafterContext.inputCard.songs,
-                        {
-                          title: crafterContext.title,
-                          id: getID(crafterContext.link),
-                        },
-                      ],
-                    },
-                  });
-                }}
-                className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
-              >
-                <Plus size={35} />
-              </button>
-              <button
-                onClick={async () => {
-                  const title = await fetchYouTubeTitle(
-                    String(getID(crafterContext.link)),
-                  );
-                  if (title) {
-                    setCrafterContext({
-                      ...crafterContext,
-                      title: title,
-                    });
-                  }
-                }}
-                className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
-              >
-                <AArrowDown size={35} />{" "}
-              </button>
-            </div>
+              Download
+            </button>
           </div>
         </div>
-      </motion.div>
+        <div
+          id="songcreationsection"
+          className={`grid grid-cols-1 p-5 gap-3 grid-rows-[1fr_10em] w-full h-full [grid-area:1/2/3/3] ${sectionStyles}`}
+        >
+          <div
+            id="list"
+            className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-y-scroll"
+          >
+            {crafterContext.inputCard.songs.map((song: any, index: any) => {
+              return (
+                <ListComponent
+                  index={index}
+                  key={index}
+                  name={song.title}
+                  setFn={setCrafterContext}
+                  crafterContext={crafterContext}
+                />
+              );
+            })}
+          </div>
+          <div
+            id="input"
+            className="grid gap-3 grid-rows-[1fr_1fr] grid-cols-[1fr_5em]"
+          >
+            <input
+              placeholder="Enter the link here"
+              type="text"
+              className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:1/1/2/2]"
+              value={String(crafterContext.link)}
+              onChange={(e) => {
+                setCrafterContext({
+                  ...crafterContext,
+                  link: e.target.value,
+                });
+              }}
+            />
+            <input
+              placeholder="Title... you can fetch it >>>"
+              type="text"
+              className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:2/1/3/2]"
+              value={crafterContext.title}
+              onChange={(e) => {
+                setCrafterContext({
+                  ...crafterContext,
+                  title: e.target.value,
+                });
+              }}
+            />
+            <button
+              onClick={() => {
+                if (!valid(crafterContext.link) || !crafterContext.title) {
+                  window.alert("Invalid Link / No Title");
+                  return;
+                }
+                setCrafterContext({
+                  ...crafterContext,
+                  link: "",
+                  title: "",
+                  inputCard: {
+                    ...crafterContext.inputCard,
+                    songs: [
+                      ...crafterContext.inputCard.songs,
+                      {
+                        title: crafterContext.title,
+                        id: getID(crafterContext.link),
+                      },
+                    ],
+                  },
+                });
+              }}
+              className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
+            >
+              <Plus size={35} />
+            </button>
+            <button
+              onClick={async () => {
+                const title = await fetchYouTubeTitle(
+                  String(getID(crafterContext.link)),
+                );
+                if (title) {
+                  setCrafterContext({
+                    ...crafterContext,
+                    title: title,
+                  });
+                }
+              }}
+              className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
+            >
+              <AArrowDown size={35} />{" "}
+            </button>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -265,14 +270,15 @@ const ListComponent = ({
   index: number;
 }) => {
   return (
-    <motion.div 
+    <motion.div
       layout
-      key={index+"Motin"}
+      key={index + "Motin"}
       initial={{ opacity: 0, transform: "translateY(-10px)" }}
       animate={{ opacity: 1, transform: "translateY(0px)" }}
       exit={{ opacity: 0, transform: "translateY(-10px)" }}
       transition={{ duration: 0.3 }}
-      className="w-full h-[5em] flex justify-between items-center bg-[rgba(0,0,0,0.3)] p-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]">
+      className="w-full h-[5em] flex justify-between items-center bg-[rgba(0,0,0,0.3)] p-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
+    >
       <p className="text-[#888] text-[1.5em] w-full overflow-scroll">
         {formatText(name, 27)}
       </p>
@@ -342,7 +348,7 @@ const CardPreviewCardCrafter = ({
   crafterContext: any;
 }) => {
   const [rotation, setRotation] = useState(0);
-  const { appContext, setAppContext }:any = useContext(LoadedCard);
+  const { appContext, setAppContext }: any = useContext(LoadedCard);
   return (
     <>
       <div
