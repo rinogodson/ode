@@ -117,7 +117,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
         </div>
         <div
           id="currentcard"
-          className={`w-full h-full flex flex-col justify-between overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
+          className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles}`}
         >
           <ColorChangeOption />
           <CardPreviewCardCrafter crafterContext={crafterContext} />
