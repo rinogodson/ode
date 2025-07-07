@@ -153,13 +153,16 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                   return;
                 }
                 const jsonstring = `
-{
-    "loadedCard": {
-      "title": "${crafterContext.inputCard.title}",  
-      "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
-}
-`;
-                download(`${crafterContext.inputCard.properties.title}.card`, jsonstring);
+                {
+                  "loadedCard": {
+                  "title": "${crafterContext.inputCard.title}",  
+                  "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
+                }
+                `;
+                download(
+                  `${crafterContext.inputCard.properties.title}.card`,
+                  jsonstring,
+                );
 
                 setShowCrafter(false);
               }}
