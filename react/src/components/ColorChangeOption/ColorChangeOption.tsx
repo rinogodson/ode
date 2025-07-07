@@ -1,7 +1,6 @@
 import { Droplet, Laugh, Palette, Type } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import EmojiPicker, { Theme } from "emoji-picker-react";
 
 function ColorChangeOption() {
   const [option, setOption] = useState({
@@ -12,7 +11,7 @@ function ColorChangeOption() {
   const [inputValue, setInputValue] = useState({
     color: "#3E3F76",
     blur: "1",
-    emoji: "❤️",
+    char: "❤️",
   });
 
   const style = {
@@ -102,15 +101,23 @@ function ColorChangeOption() {
         <AnimatePresence mode="wait">
           {option.isTitle ? (
             <motion.div
-              key="emoji"
+              key="char"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.3 }}
               className="text-[#FFF] text-[1.2em] font-semibold flex items-center gap-3"
             >
-              <button>💀</button>
-              <p>Emoji</p>
+              <input
+                value={inputValue.char}
+                onChange={(e) =>
+                  setInputValue({ ...inputValue, char: e.target.value })
+                }
+                type="text"
+                maxLength={3}
+                className="aspect-square w-[1.8em] bg-[rgba(255,255,255,0.08)] rounded-[0.7em] border-[0.08em] border-[rgba(255,255,255,0.1)] text-center"
+              />
+              <p>Char</p>
             </motion.div>
           ) : (
             <motion.div
@@ -142,7 +149,7 @@ function ColorChangeOption() {
             </motion.div>
           ) : (
             <motion.div
-              key="emojiIcon"
+              key="charIcon"
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10 }}
@@ -158,13 +165,6 @@ function ColorChangeOption() {
           )}
         </AnimatePresence>
       </div>
-      { option.isTitle && <EmojiPicker
-        className="z-1000"
-        style={{ position: "absolute", top: "5em", left: "12.5%" }}
-        lazyLoadEmojis
-        autoFocusSearch={false}
-        theme={Theme.DARK}
-      /> }
     </div>
   );
 }
