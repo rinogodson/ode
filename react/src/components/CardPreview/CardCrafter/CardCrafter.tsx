@@ -29,6 +29,14 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     link: "",
     title: "",
     inputCard: {
+      properties: {
+        title: "Default Card",
+        color: "#3E3F76",
+        blur: "1",
+        bgType: "color",
+        cdHero: "char",
+        char: "❤️",
+      },
       title: "",
       songs: [],
     },
@@ -103,7 +111,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
             type="text"
             placeholder="Enter Title"
             className="w-full h-full p-5 text-[3em] outline-none"
-            value={crafterContext.inputCard.title}
+            value={crafterContext.inputCard.properties.title}
             onChange={(e) => {
               setCrafterContext({
                 ...crafterContext,
@@ -136,7 +144,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
             <button
               onClick={() => {
                 if (
-                  !crafterContext.inputCard.title ||
+                  !crafterContext.inputCard.properties.title ||
                   crafterContext.inputCard.songs.length === 0
                 ) {
                   window.alert(
@@ -151,7 +159,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
       "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
 }
 `;
-                download(`${crafterContext.inputCard.title}.card`, jsonstring);
+                download(`${crafterContext.inputCard.properties.title}.card`, jsonstring);
 
                 setShowCrafter(false);
               }}
