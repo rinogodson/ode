@@ -1,3 +1,4 @@
+import ColorChangeOption from "@/components/ColorChangeOption/ColorChangeOption";
 import { LoadedCard } from "@/services/ContextService";
 import {
   download,
@@ -28,6 +29,14 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     link: "",
     title: "",
     inputCard: {
+      properties: {
+        title: "",
+        color: "#3E3F76",
+        blur: "1",
+        bgType: "color",
+        cdHero: "char",
+        char: "❤️",
+      },
       title: "",
       songs: [],
     },
@@ -93,7 +102,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
       transition={{ duration: 0.5 }}
       className="flex justify-center items-center w-screen h-screen absolute top-0 left-0 bg-[rgba(0,0,0,0.5)] z-10000 backdrop-blur-[20px]"
     >
-      <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_5fr] p-5 gap-5">
+      <div className="w-[60em] h-[45em] bg-[#0b0b0b] border-[1px] rounded-[2em] border-[rgba(255,255,255,0.1)] grid grid-cols-[25em_1fr]  grid-rows-[1fr_7fr] p-5 gap-5">
         <div
           id="titlesection"
           className={`w-full h-full flex justify-center items-center [grid-area:1/1/2/2] ${sectionStyles}`}
@@ -102,7 +111,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
             type="text"
             placeholder="Enter Title"
             className="w-full h-full p-5 text-[3em] outline-none"
-            value={crafterContext.inputCard.title}
+            value={crafterContext.inputCard.properties.title}
             onChange={(e) => {
               setCrafterContext({
                 ...crafterContext,
@@ -116,8 +125,9 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
         </div>
         <div
           id="currentcard"
-          className={`w-full h-full flex flex-col justify-end overflow-hidden items-center [grid-area:2/1/3/2] ${sectionStyles}`}
+          className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles}`}
         >
+          <ColorChangeOption setCrafterContext={setCrafterContext} crafterContext={crafterContext} />
           <CardPreviewCardCrafter crafterContext={crafterContext} />
           <div
             id="btncont"
@@ -134,7 +144,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
             <button
               onClick={() => {
                 if (
-                  !crafterContext.inputCard.title ||
+                  !crafterContext.inputCard.properties.title ||
                   crafterContext.inputCard.songs.length === 0
                 ) {
                   window.alert(
@@ -143,13 +153,16 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                   return;
                 }
                 const jsonstring = `
-{
-    "loadedCard": {
-      "title": "${crafterContext.inputCard.title}",  
-      "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
-}
-`;
-                download(`${crafterContext.inputCard.title}.card`, jsonstring);
+                {
+                  "loadedCard": {
+                  "title": "${crafterContext.inputCard.title}",  
+                  "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
+                }
+                `;
+                download(
+                  `${crafterContext.inputCard.properties.title}.card`,
+                  jsonstring,
+                );
 
                 setShowCrafter(false);
               }}
@@ -354,7 +367,7 @@ const CardPreviewCardCrafter = ({
       <div
         className="cursor-pointer grid relative grid-cols-1 grid-rows-[10em_1px_1fr]  w-[12em]"
         style={{
-          bottom: rotation == 0 ? "4em" : "-3em",
+          bottom: rotation == 0 ? "-1em" : "-7em",
           transition: "all 0.65s cubic-bezier(0.77, 0, 0.175, 1)",
         }}
       >
@@ -373,8 +386,10 @@ const CardPreviewCardCrafter = ({
         >
           <div
             style={{
-              background: "#3E3F76",
-              filter: `hue-rotate(${crafterContext.inputCard.title.length * 10}deg)`,
+              background:
+                crafterContext.inputCard.properties.bgType === "color"
+                  ? crafterContext.inputCard.properties.color
+                  : "black",
             }}
             className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
           >

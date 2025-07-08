@@ -28,7 +28,7 @@ export const CardPreview = () => {
           <div
             style={{
               background: "#3E3F76",
-              filter: `hue-rotate(${appContext.loadedCard.title.length * 10}deg)`,
+              filter: `hue-rotate(${appContext.loadedCard.properties.title.length * 10}deg)`,
             }}
             className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
           >
@@ -38,7 +38,7 @@ export const CardPreview = () => {
                 fontFamily: "Pixelify Sans",
               }}
             >
-              {formatText(appContext.loadedCard.title, 20)}
+              {formatText(appContext.loadedCard.properties.title, 20)}
             </p>
           </div>
           <p
