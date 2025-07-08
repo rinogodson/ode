@@ -30,7 +30,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     title: "",
     inputCard: {
       properties: {
-        title: "Default Card",
+        title: "",
         color: "#3E3F76",
         blur: "1",
         bgType: "color",
@@ -127,7 +127,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
           id="currentcard"
           className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles}`}
         >
-          <ColorChangeOption />
+          <ColorChangeOption setCrafterContext={setCrafterContext} crafterContext={crafterContext} />
           <CardPreviewCardCrafter crafterContext={crafterContext} />
           <div
             id="btncont"
@@ -386,8 +386,10 @@ const CardPreviewCardCrafter = ({
         >
           <div
             style={{
-              background: "#3E3F76",
-              filter: `hue-rotate(${crafterContext.inputCard.title.length * 10}deg)`,
+              background:
+                crafterContext.inputCard.properties.bgType === "color"
+                  ? crafterContext.inputCard.properties.color
+                  : "black",
             }}
             className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
           >
