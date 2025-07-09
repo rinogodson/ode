@@ -31,11 +31,11 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
     inputCard: {
       properties: {
         title: "",
-        color: "#3E3F76",
+        color: "#11262A",
         blur: "1",
         bgType: "color",
         cdHero: "char",
-        char: "❤️",
+        char: "📻",
       },
       title: "",
       songs: [],
@@ -117,7 +117,10 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                 ...crafterContext,
                 inputCard: {
                   ...crafterContext.inputCard,
-                  title: e.target.value,
+                  properties: {
+                    ...crafterContext.inputCard.properties,
+                    title: e.target.value,
+                  },
                 },
               });
             }}
@@ -127,7 +130,10 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
           id="currentcard"
           className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles}`}
         >
-          <ColorChangeOption setCrafterContext={setCrafterContext} crafterContext={crafterContext} />
+          <ColorChangeOption
+            setCrafterContext={setCrafterContext}
+            crafterContext={crafterContext}
+          />
           <CardPreviewCardCrafter crafterContext={crafterContext} />
           <div
             id="btncont"
@@ -391,16 +397,39 @@ const CardPreviewCardCrafter = ({
                   ? crafterContext.inputCard.properties.color
                   : "black",
             }}
-            className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
+            className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] flex relative justify-center items-center"
           >
-            <p
-              className="max-w-[10ch] flex w-full h-full justify-start items-end text-[1.1em]"
-              style={{
-                fontFamily: "Pixelify Sans",
-              }}
-            >
-              {formatText(crafterContext.inputCard.title, 20)}
-            </p>
+            {crafterContext.inputCard.properties.bgType === "blur" && (
+              <img
+                src={
+                  crafterContext.inputCard.properties.bgType === "color"
+                    ? ""
+                    : `https://img.youtube.com/vi/${crafterContext.inputCard.songs[crafterContext.inputCard.properties.blur - 1].id}/0.jpg`
+                }
+                alt="Song Thumbnail"
+                className="w-full h-full object-cover blur-[1em] block brightness-50"
+              />
+            )}
+
+            {crafterContext.inputCard.properties.cdHero === "char" ? (
+              <p
+                className="flex w-fit h-fit justify-start items-end text-[2.3em] absolute p-2 text-white"
+                style={{
+                  fontFamily: "Pixelify Sans",
+                }}
+              >
+                {crafterContext.inputCard.properties.char}
+              </p>
+            ) : (
+              <p
+                className="flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white"
+                style={{
+                  fontFamily: "Pixelify Sans",
+                }}
+              >
+                {formatText(crafterContext.inputCard.properties.title, 20)}
+              </p>
+            )}
           </div>
           <p
             className="flex w-full justify-center items-center m-[0.5em_0] text-[#828282]"
