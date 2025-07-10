@@ -1,5 +1,4 @@
 import ColorChangeOption from "@/components/ColorChangeOption/ColorChangeOption";
-import { LoadedCard } from "@/services/ContextService";
 import {
   download,
   fetchYouTubeTitle,
@@ -14,7 +13,7 @@ import {
   Ellipsis,
   Plus,
 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
   const style = {
@@ -128,7 +127,7 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
         </div>
         <div
           id="currentcard"
-          className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles}`}
+          className={`w-full h-full flex flex-col justify-between items-center [grid-area:2/1/3/2] ${sectionStyles.replace("bg-[#131313]", "")} bg-[radial-gradient(ellipse_at_center,_#0B0B0B,_#131313)]`}
         >
           <ColorChangeOption
             setCrafterContext={setCrafterContext}
@@ -372,14 +371,11 @@ const CardPreviewCardCrafter = ({
       <div
         className="cursor-pointer grid relative grid-cols-1 grid-rows-[10em_1px_1fr]  w-[12em]"
         style={{
-          bottom: rotation == 0 ? "-1em" : "-7em",
+          bottom: rotation == 0 ? "0em" : "-5em",
           transition: "all 0.65s cubic-bezier(0.77, 0, 0.175, 1)",
         }}
       >
         <div
-          style={{
-            boxShadow: "0 0 100px 0px rgba(0,0,0,0.5)",
-          }}
           onClick={() => {
             if (rotation != 180) {
               setRotation(180);
@@ -440,7 +436,6 @@ const CardPreviewCardCrafter = ({
         <div className="w-[calc(100%_-_2.1em)] h-[1px] bg-[#050505] border-dashed border-[#191919] border-[1px] place-self-center"></div>
         <div
           style={{
-            boxShadow: `0 0 100px 0px rgba(0,0,0,${rotation === 0 ? "0.5" : "0"})`,
             transform: `rotateX(${rotation}deg)`,
             transformOrigin: "top",
             transition: "transform 0.65s cubic-bezier(0.77, 0, 0.175, 1)",
