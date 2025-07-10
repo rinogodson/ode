@@ -367,7 +367,6 @@ const CardPreviewCardCrafter = ({
   crafterContext: any;
 }) => {
   const [rotation, setRotation] = useState(0);
-  const { appContext, setAppContext }: any = useContext(LoadedCard);
   return (
     <>
       <div
@@ -454,12 +453,6 @@ const CardPreviewCardCrafter = ({
                 return (
                   <div
                     key={index}
-                    onClick={() => {
-                      setAppContext((prev: typeof appContext) => ({
-                        ...prev,
-                        currentTrack: index,
-                      }));
-                    }}
                     style={{
                       fontFamily: "Instrument Serif",
                       fontSize: "1.2em",

@@ -6,7 +6,7 @@ import {
   Palette,
   Type,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function ColorChangeOption({
@@ -16,11 +16,6 @@ function ColorChangeOption({
   setCrafterContext: any;
   crafterContext: any;
 }) {
-  const [inputValue, setInputValue] = useState({
-    color: "#3E3F76",
-    blur: "1",
-    char: "❤️",
-  });
 
   const style = {
     pillStyle:
@@ -45,9 +40,8 @@ function ColorChangeOption({
               className="text-[#FFF] text-[1.2em] font-semibold flex items-center gap-3 w-full"
             >
               <input
-                value={inputValue.color}
+                value={crafterContext.inputCard.properties.color}
                 onChange={(e) => {
-                  setInputValue({ ...inputValue, color: e.target.value });
                   setCrafterContext((prev: any) => {
                     return {
                       ...prev,
@@ -62,7 +56,7 @@ function ColorChangeOption({
                   });
                 }}
                 type="color"
-                style={{ backgroundColor: inputValue.color }}
+                style={{ backgroundColor: crafterContext.inputCard.properties.color }}
                 className="aspect-square w-[1.8em] rounded-[0.7em] border-[0.1em] border-[rgba(255,255,255,0.1)] text-center cursor-pointer"
               />
               <p>Color</p>
