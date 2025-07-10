@@ -16,7 +16,6 @@ function ColorChangeOption({
   setCrafterContext: any;
   crafterContext: any;
 }) {
-
   const style = {
     pillStyle:
       "w-[10em] h-[3em] bg-black border-[1px_1px_2px_1px] border-[#262626] rounded-full flex items-center cursor-pointer justify-start mt-5 px-3.5",
@@ -56,7 +55,9 @@ function ColorChangeOption({
                   });
                 }}
                 type="color"
-                style={{ backgroundColor: crafterContext.inputCard.properties.color }}
+                style={{
+                  backgroundColor: crafterContext.inputCard.properties.color,
+                }}
                 className="aspect-square w-[1.8em] rounded-[0.7em] border-[0.1em] border-[rgba(255,255,255,0.1)] text-center cursor-pointer"
               />
               <p>Color</p>
@@ -221,7 +222,7 @@ function ColorChangeOption({
               className="text-[#FFF] text-[1.2em] font-semibold flex items-center gap-3"
             >
               <input
-                value={crafterContext.inputCard.properties.char} 
+                value={crafterContext.inputCard.properties.char}
                 onChange={(e) =>
                   setCrafterContext((prev: any) => {
                     return {
