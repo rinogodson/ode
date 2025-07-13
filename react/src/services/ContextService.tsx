@@ -11,7 +11,14 @@ function ContextProvider({ children }: { children: React.ReactNode }) {
     playerState: "CUED",
     currentTrack: 0,
     loadedCard: {
-      title: "Default Card",
+      properties: {
+        title: "Default Card",
+        color: "#3E3F76",
+        blur: "1",
+        bgType: "blur",
+        cdHero: "title",
+        char: "❤️",
+      },
       songs: [
         {
           title: "Line Without a Hook",

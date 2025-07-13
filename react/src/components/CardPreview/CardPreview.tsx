@@ -27,19 +27,44 @@ export const CardPreview = () => {
         >
           <div
             style={{
-              background: "#3E3F76",
-              filter: `hue-rotate(${appContext.loadedCard.title.length * 10}deg)`,
+              background:
+                appContext.loadedCard.properties.bgType === "color"
+                  ? appContext.loadedCard.properties.color
+                  : "black",
             }}
-            className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] p-2"
+            className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] block relative"
           >
-            <p
-              className="max-w-[10ch] flex w-full h-full justify-start items-end text-[1.1em]"
-              style={{
-                fontFamily: "Pixelify Sans",
-              }}
-            >
-              {formatText(appContext.loadedCard.title, 20)}
-            </p>
+            {appContext.loadedCard.properties.bgType === "blur" && (
+              <img
+                src={
+                  appContext.loadedCard.properties.bgType === "color"
+                    ? ""
+                    : `https://img.youtube.com/vi/${appContext.loadedCard.songs[appContext.loadedCard.properties.blur - 1].id}/0.jpg`
+                }
+                alt="Song Thumbnail"
+                className="w-full h-full object-cover blur-[1em] brightness-50 absolute top-0 left-0 z-0"
+              />
+            )}
+
+            {appContext.loadedCard.properties.cdHero === "char" ? (
+              <p
+                className="flex w-full h-full justify-center items-center text-[2.3em] p-2 text-white absolute z-10"
+                style={{
+                  fontFamily: "Pixelify Sans",
+                }}
+              >
+                {appContext.loadedCard.properties.char}
+              </p>
+            ) : (
+              <p
+                className="flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white"
+                style={{
+                  fontFamily: "Pixelify Sans",
+                }}
+              >
+                {formatText(appContext.loadedCard.properties.title, 20)}
+              </p>
+            )}
           </div>
           <p
             className="flex w-full justify-center items-center m-[0.5em_0] text-[#828282]"
