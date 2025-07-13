@@ -15,8 +15,8 @@ function ContextProvider({ children }: { children: React.ReactNode }) {
         title: "Default Card",
         color: "#3E3F76",
         blur: "1",
-        bgType: "color",
-        cdHero: "char",
+        bgType: "blur",
+        cdHero: "title",
         char: "❤️",
       },
       songs: [

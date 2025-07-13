@@ -160,6 +160,14 @@ function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
                 const jsonstring = `
                 {
                   "loadedCard": {
+                  "properties": {
+                    "title": "${crafterContext.inputCard.properties.title}",
+                    "color": "${crafterContext.inputCard.properties.color}",
+                    "blur": "${crafterContext.inputCard.properties.blur}",
+                    "bgType": "${crafterContext.inputCard.properties.bgType}",
+                    "cdHero": "${crafterContext.inputCard.properties.cdHero}",
+                    "char": "${crafterContext.inputCard.properties.char}"
+                  },
                   "title": "${crafterContext.inputCard.title}",  
                   "songs": ${JSON.stringify(crafterContext.inputCard.songs)}    }
                 }
