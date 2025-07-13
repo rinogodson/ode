@@ -6,7 +6,6 @@ import {
   Palette,
   Type,
 } from "lucide-react";
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function ColorChangeOption({
