@@ -21,10 +21,6 @@ function ColorChangeOption({
       "w-[10em] h-[3em] bg-black border-[1px_1px_2px_1px] border-[#262626] rounded-full flex items-center cursor-pointer justify-start mt-5 px-3.5",
   };
 
-  useEffect(() => {
-    console.log("Crafter Context Updated:", crafterContext);
-  }, []);
-
   return (
     <div className="flex flex-row self-start relative justify-self-start top-0 w-full justify-center gap-5">
       <div className={style.pillStyle}>
