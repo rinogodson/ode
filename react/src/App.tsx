@@ -53,7 +53,7 @@ function AppWithContext() {
           <button
             onClick={() => {
               window.open(
-                "https://www.youtube.com/watch?v=yz4N4c0Sx0U",
+                "https://youtu.be/pAlP9_FqU5M",
                 "_blank",
               );
             }}
@@ -81,7 +81,7 @@ function AppWithContext() {
         <button
           onClick={() => {
             window.open(
-              "https://www.youtube.com/watch?v=yz4N4c0Sx0U",
+              "https://youtu.be/pAlP9_FqU5M",
               "_blank",
             );
           }}
