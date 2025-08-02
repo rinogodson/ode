@@ -7,14 +7,7 @@ import {
 } from "@/services/serviceProvider";
 import type { cardContextType } from "@/services/types";
 import { motion } from "framer-motion";
-import {
-  AArrowDown,
-  ArrowDown,
-  ArrowUp,
-  BadgeX,
-  Ellipsis,
-  Plus,
-} from "lucide-react";
+import { AArrowDown, BadgeX, Ellipsis, Pencil, Plus } from "lucide-react";
 import { useState } from "react";
 import {
   SortableContext,
@@ -217,7 +210,7 @@ function CardCrafter({
         >
           <div
             id="list"
-            className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-y-scroll"
+            className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-x-hidden overflow-y-scroll"
           >
             <DndContext
               collisionDetection={closestCorners}
@@ -288,7 +281,7 @@ function CardCrafter({
                       ...crafterContext.inputCard.songs,
                       {
                         title: crafterContext.title,
-                        id: getID(crafterContext.link),
+                        id: getID(crafterContext.link) || "",
                       },
                     ],
                   },
@@ -344,7 +337,6 @@ const ListComponent = ({
     <div
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
       style={{
         transition: transition,
         transform: CSS.Transform.toString(transform),
@@ -352,19 +344,20 @@ const ListComponent = ({
       id={id}
       key={key_name}
     >
-      <motion.div
-        layout
-        initial={false}
-        animate={{ opacity: 1, transform: "translateY(0px)" }}
-        exit={{ opacity: 0, transform: "translateY(-10px)" }}
+      <div
         transition={{ duration: 0.3 }}
-        className="w-full h-[5em] flex justify-between items-center bg-[rgba(0,0,0,0.3)] p-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
+        className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.3)] px-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
       >
-        <p className="text-[#888] text-[1.5em] w-full overflow-scroll">
+        <p
+          {...listeners}
+          className="text-[#888] py-5 text-[1.5em] w-full overflow-scroll"
+        >
           {formatText(name, 27)}
         </p>
-
         <div className="flex gap-5">
+          <button className="text-[#888]">
+            <Pencil />
+          </button>
           <button
             onClick={() => {
               setFn({
@@ -378,12 +371,12 @@ const ListComponent = ({
                 },
               });
             }}
-            className="text-red-300"
+            className="text-[#AA7070] hover:text-[#EBA1A0] hover:rotate-90 active:rotate-0 hover:scale-120 transition-[all_100ms] active:scale-[0.9]"
           >
             <BadgeX />
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -423,17 +416,28 @@ const CardPreviewCardCrafter = ({
             className="overflow-hidden h-[80%] rounded-[1em_1em_0.25em_0.25em] flex relative justify-center items-center"
           >
             {crafterContext.inputCard.properties.bgType === "blur" && (
-              <img
-                src={
-                  crafterContext.inputCard.properties.bgType === "color"
-                    ? ""
-                    : `https://img.youtube.com/vi/${crafterContext.inputCard.songs[crafterContext.inputCard.properties.blur - 1].id}/0.jpg`
-                }
-                alt="Song Thumbnail"
-                className="w-full h-full object-cover blur-[1em] block brightness-50"
-              />
+              <>
+                {crafterContext.inputCard.songs[
+                  crafterContext.inputCard.properties.blur - 1
+                ] ? (
+                  <img
+                    src={`https://img.youtube.com/vi/${
+                      crafterContext.inputCard.songs[
+                        crafterContext.inputCard.properties.blur - 1
+                      ].id
+                    }/0.jpg`}
+                    alt="Song Thumbnail"
+                    className="w-full h-full object-cover blur-[1em] block brightness-50"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <p className="text-sm opacity-60">
+                      No background available
+                    </p>
+                  </div>
+                )}
+              </>
             )}
-
             {crafterContext.inputCard.properties.cdHero === "char" ? (
               <p
                 className="flex w-fit h-fit justify-start items-end text-[2.3em] absolute p-2 text-white"
