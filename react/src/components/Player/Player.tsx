@@ -5,7 +5,6 @@ import {
   playFn,
   pauseFn,
   ytSetup,
-  getTitle,
   seekFn,
   formatTime,
   formatText,
