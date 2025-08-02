@@ -49,10 +49,6 @@ function CardCrafter({
     },
   });
 
-  useEffect(() => {
-    console.log(crafterContext);
-  }, [crafterContext]);
-
   const getID = (url: string | null) => {
     if (typeof url !== "string") {
       return null;
