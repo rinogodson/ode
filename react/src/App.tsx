@@ -10,7 +10,7 @@ import CardCrafter from "./components/CardPreview/CardCrafter/CardCrafter";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import type { cardContextType } from "./services/types";
 import { useDropzone } from "react-dropzone";
-import { pauseFn, playFn } from "./services/serviceProvider";
+import { pauseFn } from "./services/serviceProvider";
 
 function App() {
   return (
