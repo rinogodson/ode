@@ -345,7 +345,6 @@ const ListComponent = ({
       key={key_name}
     >
       <div
-        transition={{ duration: 0.3 }}
         className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.3)] px-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
       >
         <p
