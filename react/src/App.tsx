@@ -11,6 +11,7 @@ import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import type { cardContextType } from "./services/types";
 import { useDropzone } from "react-dropzone";
 import { pauseFn } from "./services/serviceProvider";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
   return (
@@ -72,23 +73,33 @@ function AppWithContext() {
       </>
     );
   }
-  const onDrop = useCallback((receivedCard: File[]) => {
+  const onDrop = useCallback(async (receivedCard: File[]) => {
     if (receivedCard.length > 1) return;
-    receivedCard.forEach((file) => {
-      const reader = new FileReader();
-      reader.onabort = () => console.log("file reading was aborted");
-      reader.onerror = () => console.log("file reading has failed");
-      reader.onload = () => {
-        const text: string = String(reader.result);
-        const parsedText: { loadedCard: cardContextType } = JSON.parse(text);
-        console.log(parsedText.loadedCard);
 
-        setInitVal(parsedText.loadedCard);
-      };
-      reader.readAsText(file);
+    const file = receivedCard[0];
 
+    const readFileAsText = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onabort = () => reject(new Error("File reading was aborted"));
+        reader.onerror = () => reject(new Error("File reading failed"));
+        reader.onload = () => resolve(String(reader.result));
+
+        reader.readAsText(file);
+      });
+    };
+
+    try {
+      const text = await readFileAsText(file);
+      const parsedText: { loadedCard: cardContextType } = JSON.parse(text);
+      console.log(parsedText.loadedCard);
+      setInitVal(parsedText.loadedCard);
       setShowCrafter(true);
-    });
+    } catch (err) {
+      window.alert("Please upload a valid card file.");
+      console.error("Error reading file:", err);
+    }
   }, []);
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -97,9 +108,11 @@ function AppWithContext() {
 
   return (
     <>
-      {showCrafter && (
-        <CardCrafter setShowCrafter={setShowCrafter} initVal={initVal} />
-      )}
+      <AnimatePresence>
+        {showCrafter && (
+          <CardCrafter setShowCrafter={setShowCrafter} initVal={initVal} />
+        )}
+      </AnimatePresence>
       <div className="select-none">
         <Nav />
         <div className="absolute bottom-[2em] left-[2em] gap-[2em] flex flex-row items-start">
@@ -108,13 +121,13 @@ function AppWithContext() {
               setInitVal(null);
               setShowCrafter(true);
             }}
-            className=" bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+            className="cursor-pointer bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
             Create Card
           </button>
           <button
             {...getRootProps()}
-            className="bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+            className="cursor-pointer bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
             Edit Card
             <input {...getInputProps()} />
