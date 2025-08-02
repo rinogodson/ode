@@ -10,6 +10,7 @@ import CardCrafter from "./components/CardPreview/CardCrafter/CardCrafter";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import type { cardContextType } from "./services/types";
 import { useDropzone } from "react-dropzone";
+import { pauseFn, playFn } from "./services/serviceProvider";
 
 function App() {
   return (
@@ -46,6 +47,12 @@ function AppWithContext() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (showCrafter) {
+      pauseFn();
+    }
+  }, [showCrafter]);
 
   if (isMobile) {
     return (
@@ -97,7 +104,10 @@ function AppWithContext() {
         <Nav />
         <div className="absolute bottom-[2em] left-[2em] gap-[2em] flex flex-row items-start">
           <button
-            onClick={() => setShowCrafter(true)}
+            onClick={() => {
+              setInitVal(null);
+              setShowCrafter(true);
+            }}
             className=" bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
             Create Card
@@ -119,45 +129,43 @@ function AppWithContext() {
           Watch The DEMO Instead
         </button>
         <CardPreview />
-        {!showCrafter && (
-          <div className="flex justify-center items-end flex-col">
-            {appContext.playerState === "CUED" && (
-              <LoadingScreen>
-                <p>
-                  Loading... Pls wait... <br /> (maybe it's your internet speed,
-                  bruh...) <br /> TIP: Just reload 5-6 times...
-                </p>
-              </LoadingScreen>
-            )}
-            <FileDropPlate style="absolute cursor-grab" />
-            <div className="self-start ml-[6em] flex flex-col items-center">
-              <div
-                style={{
-                  background:
-                    appContext.playerState === "BUFFERING"
-                      ? "orange"
-                      : appContext.playerState === "PLAYING"
-                        ? "#01E460"
-                        : appContext.playerState === "CUED"
-                          ? "#ff0000"
-                          : "#2b2b2b",
-                  boxShadow: `0 0 40px 3px ${appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PLAYING" ? "#40FF32" : appContext.playerState === "CUED" ? "red" : "rgba(0,0,0,0)"}`,
-                  transition: "all 100ms ease",
-                }}
-                className="w-5  rounded-full transform-[translate(0,_1em)] aspect-square"
-              ></div>
-              <div className="transform-[translate(0,10px)] z-[-2] w-4 h-12 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] to-[#0e0e0e] rounded-t-[10px] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
-              {/* shadow-[0_0_20px_3px_green] */}
-              <div className="transform-[translate(0,5px)] z-[-1] w-6 h-15 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] rounded-t-[10px] to-[#0e0e0e] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
-              <div className="w-8 h-10 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] rounded-t-[10px] to-[#0e0e0e] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
-            </div>
-            <Player
-              timestamp={timestamp}
-              setTimestamp={setTimestamp}
-              yt_ref={yt_ref}
-            />
+        <div className="flex justify-center items-end flex-col">
+          {appContext.playerState === "CUED" && (
+            <LoadingScreen>
+              <p>
+                Loading... Pls wait... <br /> (maybe it's your internet speed,
+                bruh...) <br /> TIP: Just reload 5-6 times...
+              </p>
+            </LoadingScreen>
+          )}
+          <FileDropPlate style="absolute cursor-grab" />
+          <div className="self-start ml-[6em] flex flex-col items-center">
+            <div
+              style={{
+                background:
+                  appContext.playerState === "BUFFERING"
+                    ? "orange"
+                    : appContext.playerState === "PLAYING"
+                      ? "#01E460"
+                      : appContext.playerState === "CUED"
+                        ? "#ff0000"
+                        : "#2b2b2b",
+                boxShadow: `0 0 40px 3px ${appContext.playerState === "BUFFERING" ? "orange" : appContext.playerState === "PLAYING" ? "#40FF32" : appContext.playerState === "CUED" ? "red" : "rgba(0,0,0,0)"}`,
+                transition: "all 100ms ease",
+              }}
+              className="w-5  rounded-full transform-[translate(0,_1em)] aspect-square"
+            ></div>
+            <div className="transform-[translate(0,10px)] z-[-2] w-4 h-12 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] to-[#0e0e0e] rounded-t-[10px] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
+            {/* shadow-[0_0_20px_3px_green] */}
+            <div className="transform-[translate(0,5px)] z-[-1] w-6 h-15 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] rounded-t-[10px] to-[#0e0e0e] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
+            <div className="w-8 h-10 bg-gradient-to-r from-[#0e0e0e] via-[#1e1e1e] rounded-t-[10px] to-[#0e0e0e] shadow-[inset_0_5px_10px_0px_rgba(0,0,0,0.5)]"></div>
           </div>
-        )}
+          <Player
+            timestamp={timestamp}
+            setTimestamp={setTimestamp}
+            yt_ref={yt_ref}
+          />
+        </div>
       </div>
     </>
   );
