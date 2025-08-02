@@ -1,5 +1,4 @@
 import { useState, createContext } from "react";
-
 // @ts-ignore
 export const LoadedCard = createContext({
   appContext: {},
@@ -7,7 +6,7 @@ export const LoadedCard = createContext({
 });
 
 function ContextProvider({ children }: { children: React.ReactNode }) {
-  const [appContext, setAppContext]: any = useState({
+  const [appContext, setAppContext]: any[] = useState({
     playerState: "CUED",
     currentTrack: 0,
     loadedCard: {

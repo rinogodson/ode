@@ -4,6 +4,7 @@ import {
   fetchYouTubeTitle,
   formatText,
 } from "@/services/serviceProvider";
+import type { cardContextType } from "@/services/types";
 import { motion } from "framer-motion";
 import {
   AArrowDown,
@@ -14,20 +15,27 @@ import {
   Plus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+interface CrafterContextType {
+  link: string;
+  title: string;
+  inputCard: cardContextType;
+}
 
-function CardCrafter({ setShowCrafter }: { setShowCrafter: Function }) {
+function CardCrafter({
+  setShowCrafter,
+  initVal,
+}: {
+  setShowCrafter: Function;
+  initVal: cardContextType | null;
+}) {
   const style = {
     buttonStyle:
       "bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center transition-[all_100ms] active:scale-[0.9] hover:bg-[#2b2b2b] hover:scale-[0.99] cursor-pointer",
   };
-
-  const [crafterContext, setCrafterContext]: [
-    { link: string | null; title: string; inputCard: any },
-    Function,
-  ] = useState({
+  const [crafterContext, setCrafterContext] = useState<CrafterContextType>({
     link: "",
     title: "",
-    inputCard: {
+    inputCard: initVal || {
       properties: {
         title: "",
         color: "#11262A",

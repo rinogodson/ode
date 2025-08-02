@@ -8,6 +8,7 @@ import ContextProvider, { LoadedCard } from "./services/ContextService";
 import { CardPreview } from "./components/CardPreview/CardPreview";
 import CardCrafter from "./components/CardPreview/CardCrafter/CardCrafter";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
+import type { cardContextType } from "./services/types";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function AppWithContext() {
   });
 
   const [showCrafter, setShowCrafter] = useState(false);
+  const [initVal, setInitVal] = useState<cardContextType | null>(null);
 
   const { appContext }: any = useContext(LoadedCard);
 
@@ -65,7 +67,9 @@ function AppWithContext() {
 
   return (
     <>
-      {showCrafter && <CardCrafter setShowCrafter={setShowCrafter} />}
+      {showCrafter && (
+        <CardCrafter setShowCrafter={setShowCrafter} initVal={initVal} />
+      )}
       <div className="select-none">
         <Nav />
         <div className="absolute bottom-[2em] left-[2em] gap-[2em] flex flex-row items-start">
@@ -76,7 +80,21 @@ function AppWithContext() {
             Create Card
           </button>
           <button
-            onClick={() => setShowCrafter(true)}
+            onClick={() => {
+              setInitVal({
+                properties: {
+                  title: "jsfhsjakhfkjh",
+                  color: "#11262A",
+                  blur: "1",
+                  bgType: "color",
+                  cdHero: "char",
+                  char: "📻",
+                },
+                title: "",
+                songs: [],
+              });
+              setShowCrafter(true);
+            }}
             className="bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
             Edit Card
