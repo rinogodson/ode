@@ -8,7 +8,7 @@ interface cardContextType {
     char: string;
   };
   title: string;
-  songs: { title: string; id: string | null }[];
+  songs: { title: string; id: string }[];
 }
 
 export type { cardContextType };

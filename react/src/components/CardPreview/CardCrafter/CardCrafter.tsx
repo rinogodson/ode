@@ -1,4 +1,5 @@
 import ColorChangeOption from "@/components/ColorChangeOption/ColorChangeOption";
+import { closestCorners, DndContext, type DragEndEvent } from "@dnd-kit/core";
 import {
   download,
   fetchYouTubeTitle,
@@ -15,6 +16,12 @@ import {
   Plus,
 } from "lucide-react";
 import { useState } from "react";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 interface CrafterContextType {
   link: string;
   title: string;
@@ -94,7 +101,22 @@ function CardCrafter({
 
     return patterns.some((pattern) => pattern.test(url));
   }
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
+    setCrafterContext((ctx) => {
+      const oldIndex = ctx.inputCard.songs.findIndex((s) => s.id === active.id);
+      const newIndex = ctx.inputCard.songs.findIndex((s) => s.id === over.id);
+      const newSongs = [...ctx.inputCard.songs];
+      newSongs.splice(oldIndex, 1);
+      newSongs.splice(newIndex, 0, ctx.inputCard.songs[oldIndex]);
+      return {
+        ...ctx,
+        inputCard: { ...ctx.inputCard, songs: newSongs },
+      };
+    });
+  };
   const sectionStyles =
     "bg-[#131313] border-[0.1px] border-[rgba(255,255,255,0.08)] rounded-[0.75em]";
   return (
@@ -197,17 +219,30 @@ function CardCrafter({
             id="list"
             className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-y-scroll"
           >
-            {crafterContext.inputCard.songs.map((song: any, index: any) => {
-              return (
-                <ListComponent
-                  index={index}
-                  key={index}
-                  name={song.title}
-                  setFn={setCrafterContext}
-                  crafterContext={crafterContext}
-                />
-              );
-            })}
+            <DndContext
+              collisionDetection={closestCorners}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={crafterContext.inputCard.songs.map((song) => song.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {crafterContext.inputCard.songs.map(
+                  (song: { title: string; id: string }, index: number) => {
+                    return (
+                      <ListComponent
+                        key_name={song.id}
+                        id={song.id}
+                        name={song.title}
+                        setFn={setCrafterContext}
+                        crafterContext={crafterContext}
+                        index={index}
+                      />
+                    );
+                  },
+                )}
+              </SortableContext>
+            </DndContext>
           </div>
           <div
             id="input"
@@ -290,85 +325,66 @@ export default CardCrafter;
 
 const ListComponent = ({
   name,
+  key_name,
+  id,
   setFn,
   crafterContext,
   index,
 }: {
   name: string;
+  key_name: string;
+  id: string;
   setFn: Function;
   crafterContext: any;
   index: number;
 }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: id });
   return (
-    <motion.div
-      layout
-      key={index + "Motin"}
-      initial={{ opacity: 0, transform: "translateY(-10px)" }}
-      animate={{ opacity: 1, transform: "translateY(0px)" }}
-      exit={{ opacity: 0, transform: "translateY(-10px)" }}
-      transition={{ duration: 0.3 }}
-      className="w-full h-[5em] flex justify-between items-center bg-[rgba(0,0,0,0.3)] p-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={{
+        transition: transition,
+        transform: CSS.Transform.toString(transform),
+      }}
+      id={id}
+      key={key_name}
     >
-      <p className="text-[#888] text-[1.5em] w-full overflow-scroll">
-        {formatText(name, 27)}
-      </p>
+      <motion.div
+        layout
+        initial={false}
+        animate={{ opacity: 1, transform: "translateY(0px)" }}
+        exit={{ opacity: 0, transform: "translateY(-10px)" }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-[5em] flex justify-between items-center bg-[rgba(0,0,0,0.3)] p-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
+      >
+        <p className="text-[#888] text-[1.5em] w-full overflow-scroll">
+          {formatText(name, 27)}
+        </p>
 
-      <div className="flex gap-5">
-        <div className="flex flex-col gap-1">
+        <div className="flex gap-5">
           <button
             onClick={() => {
-              let temp = crafterContext.inputCard.songs;
-              if (index - 1 < 0) return;
-              [temp[index], temp[index - 1]] = [temp[index - 1], temp[index]];
               setFn({
                 ...crafterContext,
                 inputCard: {
                   ...crafterContext.inputCard,
-                  songs: temp,
+                  songs: [
+                    ...crafterContext.inputCard.songs.slice(0, index),
+                    ...crafterContext.inputCard.songs.slice(index + 1),
+                  ],
                 },
               });
             }}
-            className="bg-[#1b1b1b] rounded-full flex justify-center items-center text-[#888]"
+            className="text-red-300"
           >
-            <ArrowUp size={27} />
-          </button>
-          <button
-            onClick={() => {
-              let temp = crafterContext.inputCard.songs;
-              if (index + 1 >= temp.length) return;
-              [temp[index], temp[index + 1]] = [temp[index + 1], temp[index]];
-              setFn({
-                ...crafterContext,
-                inputCard: {
-                  ...crafterContext.inputCard,
-                  songs: temp,
-                },
-              });
-            }}
-            className="bg-[#1b1b1b] rounded-full flex justify-center items-center text-[#888]"
-          >
-            <ArrowDown size={27} />
+            <BadgeX />
           </button>
         </div>
-        <button
-          onClick={() => {
-            setFn({
-              ...crafterContext,
-              inputCard: {
-                ...crafterContext.inputCard,
-                songs: [
-                  ...crafterContext.inputCard.songs.slice(0, index),
-                  ...crafterContext.inputCard.songs.slice(index + 1),
-                ],
-              },
-            });
-          }}
-          className="text-red-300"
-        >
-          <BadgeX />
-        </button>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
