@@ -52,10 +52,7 @@ function AppWithContext() {
 
           <button
             onClick={() => {
-              window.open(
-                "https://youtu.be/pAlP9_FqU5M",
-                "_blank",
-              );
+              window.open("https://youtu.be/pAlP9_FqU5M", "_blank");
             }}
             className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
@@ -71,19 +68,23 @@ function AppWithContext() {
       {showCrafter && <CardCrafter setShowCrafter={setShowCrafter} />}
       <div className="select-none">
         <Nav />
-        <button
-          onClick={() => setShowCrafter(true)}
-          className="absolute bottom-[2em] left-[2em] bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
-        >
-          Create Card
-        </button>
-
+        <div className="absolute bottom-[2em] left-[2em] gap-[2em] flex flex-row items-start">
+          <button
+            onClick={() => setShowCrafter(true)}
+            className=" bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+          >
+            Create Card
+          </button>
+          <button
+            onClick={() => setShowCrafter(true)}
+            className="bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+          >
+            Edit Card
+          </button>
+        </div>
         <button
           onClick={() => {
-            window.open(
-              "https://youtu.be/pAlP9_FqU5M",
-              "_blank",
-            );
+            window.open("https://youtu.be/pAlP9_FqU5M", "_blank");
           }}
           className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
         >
