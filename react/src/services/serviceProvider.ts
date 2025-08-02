@@ -51,9 +51,6 @@ const pauseFn = () => {
   ytElement.pause();
 };
 
-const getTitle = () => {
-  //  ytElement.command("setPlaybackRate", [2]);
-};
 
 const seekFn = (seconds: number) => {
   ytElement.command("seekTo", [seconds]);
@@ -73,7 +70,6 @@ export {
   playFn,
   pauseFn,
   ytSetup,
-  getTitle,
   seekFn,
   formatTime,
   formatText,
