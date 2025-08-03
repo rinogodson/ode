@@ -1,10 +1,16 @@
 import { LoadedCard } from "@/services/ContextService";
-import React, { useCallback, useEffect, useContext } from "react";
+import { useCallback, useEffect, useContext } from "react";
 import { useDropzone } from "react-dropzone";
-export const FileDropPlate = ({ style }: { style?: string }) => {
-  const [pulled, setPulled] = React.useState(false);
-
-  const { appContext, setAppContext }:any = useContext(LoadedCard);
+export const FileDropPlate = ({
+  style,
+  pulled,
+  setPulled,
+}: {
+  style?: string;
+  pulled: any;
+  setPulled: any;
+}) => {
+  const { appContext, setAppContext }: any = useContext(LoadedCard);
 
   const onDrop = useCallback((receivedCard: File[]) => {
     if (receivedCard.length > 1) return;
@@ -14,8 +20,12 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
       reader.onerror = () => console.log("file reading has failed");
       reader.onload = () => {
         const text: string = String(reader.result);
-        const parsedText: typeof appContext.loadedCard = JSON.parse(text)
-        setAppContext((prev: typeof appContext) => ({...prev, currentTrack: 0, ...parsedText}));
+        const parsedText: typeof appContext.loadedCard = JSON.parse(text);
+        setAppContext((prev: typeof appContext) => ({
+          ...prev,
+          currentTrack: 0,
+          ...parsedText,
+        }));
       };
       reader.readAsText(file);
     });
@@ -33,6 +43,13 @@ export const FileDropPlate = ({ style }: { style?: string }) => {
       setPulled(false);
     }
   }, [isDragActive]);
+
+  useEffect(() => {
+    if (pulled) {
+      open();
+      setPulled(false);
+    }
+  }, [pulled, open]);
 
   return (
     <div

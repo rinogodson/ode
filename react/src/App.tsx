@@ -10,7 +10,7 @@ import CardCrafter from "./components/CardPreview/CardCrafter/CardCrafter";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import type { cardContextType } from "./services/types";
 import { useDropzone } from "react-dropzone";
-import { pauseFn } from "./services/serviceProvider";
+import { pauseFn, playFn, seekFn } from "./services/serviceProvider";
 import { AnimatePresence } from "framer-motion";
 
 function App() {
@@ -31,7 +31,8 @@ function AppWithContext() {
   const [showCrafter, setShowCrafter] = useState(false);
   const [initVal, setInitVal] = useState<cardContextType | null>(null);
 
-  const { appContext }: any = useContext(LoadedCard);
+  const { appContext, setAppContext }: any = useContext(LoadedCard);
+  const [pulled, setPulled] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -106,6 +107,53 @@ function AppWithContext() {
     noClick: false,
   });
 
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === " ") {
+        event.preventDefault();
+        if (appContext.playerState === "PLAYING") {
+          pauseFn();
+        }
+        if (
+          appContext.playerState === "PAUSED" ||
+          appContext.playerState === "UNSTARTED"
+        ) {
+          playFn();
+        }
+      } else if (event.key === "l") {
+        setAppContext((prev: any) => {
+          const maxIndex = prev.loadedCard.songs.length - 1;
+          const newIndex = Math.min(prev.currentTrack + 1, maxIndex);
+          return {
+            ...prev,
+            currentTrack: newIndex,
+          };
+        });
+      } else if (event.key === "h") {
+        setAppContext((prev: any) => {
+          const maxIndex = prev.loadedCard.songs.length - 1;
+          const newIndex = Math.min(prev.currentTrack - 1, maxIndex);
+          return {
+            ...prev,
+            currentTrack: newIndex < 0 ? 0 : newIndex,
+          };
+        });
+      } else if (event.key === "j") {
+        seekFn(timestamp.current - 10);
+      } else if (event.key === "k") {
+        seekFn(timestamp.current + 10);
+      } else if (event.key === "o") {
+        setPulled((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [appContext.playerState, pauseFn, playFn]);
+
   return (
     <>
       <AnimatePresence>
@@ -151,7 +199,11 @@ function AppWithContext() {
               </p>
             </LoadingScreen>
           )}
-          <FileDropPlate style="absolute cursor-grab" />
+          <FileDropPlate
+            style="absolute cursor-grab"
+            pulled={pulled}
+            setPulled={setPulled}
+          />
           <div className="self-start ml-[6em] flex flex-col items-center">
             <div
               style={{

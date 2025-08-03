@@ -2,12 +2,14 @@ import { LoadedCard } from "@/services/ContextService";
 import { formatText } from "@/services/serviceProvider";
 import { Ellipsis } from "lucide-react";
 import { useContext, useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 export const CardPreview = () => {
   const [rotation, setRotation] = useState(0);
   const { appContext, setAppContext }: any = useContext(LoadedCard);
   return (
     <>
+      <Tooltip id="card-preview-tooltip" />
       <div
         className="cursor-pointer absolute right-8 grid grid-cols-1 grid-rows-[10em_1px_1fr]  w-[12em]"
         style={{
@@ -87,7 +89,10 @@ export const CardPreview = () => {
               (song: { title: string; id: string }, index: number) => {
                 return (
                   <div
-                    key={index+"prev"}
+                    data-tooltip-id="card-preview-tooltip"
+                    data-tooltip-content={song.title}
+                    data-tooltip-place="left"
+                    key={index + "prev"}
                     onClick={() => {
                       setAppContext((prev: typeof appContext) => ({
                         ...prev,

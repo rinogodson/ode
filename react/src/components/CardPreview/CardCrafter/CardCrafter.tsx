@@ -1,3 +1,4 @@
+import { Tooltip } from "react-tooltip";
 import ColorChangeOption from "@/components/ColorChangeOption/ColorChangeOption";
 import { closestCorners, DndContext, type DragEndEvent } from "@dnd-kit/core";
 import {
@@ -220,6 +221,8 @@ function CardCrafter({
                 items={crafterContext.inputCard.songs.map((song) => song.id)}
                 strategy={verticalListSortingStrategy}
               >
+                <Tooltip id={"crafter-tip"} />
+                <Tooltip id={"card-tip"} className="z-10000 scale-80" />
                 {crafterContext.inputCard.songs.map(
                   (song: { title: string; id: string }, index: number) => {
                     return (
@@ -271,14 +274,28 @@ function CardCrafter({
                   window.alert("Invalid Link / No Title");
                   return;
                 }
-                if (
-                  crafterContext.inputCard.songs
-                    .map((s) => s.id)
-                    .includes(getID(crafterContext.link) || "")
-                ) {
-                  window.alert("This song is already added!");
+                const existingSongIndex =
+                  crafterContext.inputCard.songs.findIndex(
+                    (song) => song.id === getID(crafterContext.link),
+                  );
+                if (existingSongIndex !== -1) {
+                  const updatedSongs = [...crafterContext.inputCard.songs];
+                  updatedSongs[existingSongIndex] = {
+                    title: crafterContext.title,
+                    id: getID(crafterContext.link) || "",
+                  };
+                  setCrafterContext({
+                    ...crafterContext,
+                    link: "",
+                    title: "",
+                    inputCard: {
+                      ...crafterContext.inputCard,
+                      songs: updatedSongs,
+                    },
+                  });
                   return;
                 }
+
                 setCrafterContext({
                   ...crafterContext,
                   link: "",
@@ -351,6 +368,9 @@ const ListComponent = ({
       }}
       id={id}
       key={key_name}
+      data-tooltip-id={"crafter-tip"}
+      data-tooltip-content={name}
+      data-tooltip-place="top"
     >
       <div className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.6)] px-6 rounded-[3em] border-3 border-[rgba(255,255,255,0.1)]">
         <p
@@ -434,11 +454,10 @@ const CardPreviewCardCrafter = ({
                   crafterContext.inputCard.properties.blur - 1
                 ] ? (
                   <img
-                    src={`https://img.youtube.com/vi/${
-                      crafterContext.inputCard.songs[
+                    src={`https://img.youtube.com/vi/${crafterContext.inputCard.songs[
                         crafterContext.inputCard.properties.blur - 1
                       ].id
-                    }/0.jpg`}
+                      }/0.jpg`}
                     alt="Song Thumbnail"
                     className="w-full h-full object-cover blur-[1em] block brightness-50"
                   />
@@ -492,6 +511,9 @@ const CardPreviewCardCrafter = ({
               (song: { title: string; id: string }, index: number) => {
                 return (
                   <div
+                    data-tooltip-id={"card-tip"}
+                    data-tooltip-content={song.title}
+                    data-tooltip-place="left-end"
                     key={index}
                     style={{
                       fontFamily: "Instrument Serif",
