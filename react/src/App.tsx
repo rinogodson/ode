@@ -12,6 +12,7 @@ import type { cardContextType } from "./services/types";
 import { useDropzone } from "react-dropzone";
 import { pauseFn, playFn, seekFn } from "./services/serviceProvider";
 import { AnimatePresence } from "framer-motion";
+import { Pencil, Plus } from "lucide-react";
 
 function App() {
   return (
@@ -144,6 +145,11 @@ function AppWithContext() {
         seekFn(timestamp.current + 10);
       } else if (event.key === "o") {
         setPulled((prev) => !prev);
+      } else if (event.key === "c") {
+        setInitVal(null);
+        setShowCrafter(true);
+      } else if (event.key === "Escape") {
+        setShowCrafter(false);
       }
     };
 
@@ -169,15 +175,17 @@ function AppWithContext() {
               setInitVal(null);
               setShowCrafter(true);
             }}
-            className="cursor-pointer bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+            className="flex justify-center items-center gap-2 px-3 pr-4 cursor-pointer bg-linear-to-b from-[white] to-[rgba(200,200,200)] border-[1px] border-[rgba(0,0,0,0.4)] text-[#010101] py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
-            Create Card
+            <Plus />
+            Create
           </button>
           <button
             {...getRootProps()}
-            className="cursor-pointer bg-[#f0f0f0] text-[#010101] px-4 py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+            className="flex justify-center items-center gap-3 px-4 pr-4 cursor-pointer bg-linear-to-b from-[white] to-[rgba(200,200,200)] text-[#010101] py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
-            Edit Card
+            <Pencil size={20} />
+            Edit
             <input {...getInputProps()} />
           </button>
         </div>

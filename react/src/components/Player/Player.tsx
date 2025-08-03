@@ -187,7 +187,15 @@ function Player({
             )}
           </p>
           <div className="[grid-area:_1_/_2_/_3_/_3]">
-            <img src="./Vector.svg" width={"80%"} height={"80%"} />
+            <img
+              src="./Vector.svg"
+              width={"80%"}
+              height={"80%"}
+              className={
+                ( appContext.playerState === "PLAYING" ? "animate-pulse" : "" ) + " hover:scale-110 active:scale-100 transition-all duration-200 ease-in-out"
+              }
+              draggable={false}
+            />
             <div className="h-[2.3em] z-[-1] blur-[20px] transform-[translate(0%,-100%)] aspect-square bg-[rgba(0,100,0,0.5)] absolute"></div>
           </div>
         </div>
@@ -257,4 +265,3 @@ export const Button = ({
     </button>
   );
 };
-

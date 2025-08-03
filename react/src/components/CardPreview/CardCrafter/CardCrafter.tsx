@@ -295,7 +295,6 @@ function CardCrafter({
                   });
                   return;
                 }
-
                 setCrafterContext({
                   ...crafterContext,
                   link: "",
