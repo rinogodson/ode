@@ -53,7 +53,6 @@ function Player({
         ...prev,
         playerState: e.detail,
       }));
-      getTitle();
     });
   }, []);
 

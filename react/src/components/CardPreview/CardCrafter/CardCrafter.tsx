@@ -7,7 +7,7 @@ import {
 } from "@/services/serviceProvider";
 import type { cardContextType } from "@/services/types";
 import { motion } from "framer-motion";
-import { AArrowDown, BadgeX, Ellipsis, Pencil, Plus } from "lucide-react";
+import { AArrowDown, BadgeX, Copy, Ellipsis, Plus } from "lucide-react";
 import { useState } from "react";
 import {
   SortableContext,
@@ -210,7 +210,7 @@ function CardCrafter({
         >
           <div
             id="list"
-            className="border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-x-hidden overflow-y-scroll"
+            className="pb-[3em] border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-x-hidden overflow-y-scroll"
           >
             <DndContext
               collisionDetection={closestCorners}
@@ -269,6 +269,14 @@ function CardCrafter({
               onClick={() => {
                 if (!valid(crafterContext.link) || !crafterContext.title) {
                   window.alert("Invalid Link / No Title");
+                  return;
+                }
+                if (
+                  crafterContext.inputCard.songs
+                    .map((s) => s.id)
+                    .includes(getID(crafterContext.link) || "")
+                ) {
+                  window.alert("This song is already added!");
                   return;
                 }
                 setCrafterContext({
@@ -344,18 +352,24 @@ const ListComponent = ({
       id={id}
       key={key_name}
     >
-      <div
-        className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.3)] px-6 rounded-2xl border-b-3 border-b-[rgba(255,255,255,0.1)]"
-      >
+      <div className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.6)] px-6 rounded-[3em] border-3 border-[rgba(255,255,255,0.1)]">
         <p
           {...listeners}
           className="text-[#888] py-5 text-[1.5em] w-full overflow-scroll"
         >
-          {formatText(name, 27)}
+          {formatText(name, 28)}
         </p>
         <div className="flex gap-5">
-          <button className="text-[#888]">
-            <Pencil />
+          <button
+            className="text-[#888] hover:text-[#FFF] hover:scale-120 active:scale-[0.9] transition-[all_100ms]"
+            onClick={() => {
+              navigator.clipboard.writeText(
+                "https://www.youtube.com/watch?v=" + id,
+              );
+              window.alert("Copied to clipboard!");
+            }}
+          >
+            <Copy />
           </button>
           <button
             onClick={() => {
