@@ -47,9 +47,9 @@ export const FileDropPlate = ({
   useEffect(() => {
     if (pulled) {
       open();
-      setPulled(false);
+      setPulled(true);
     }
-  }, [pulled, open]);
+  }, [open]);
 
   return (
     <div

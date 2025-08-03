@@ -59,12 +59,12 @@ export const CardPreview = () => {
               </p>
             ) : (
               <p
-                className="flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white"
+                className="flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white whitespace-nowrap overflow-hidden overflow-ellipsis"
                 style={{
                   fontFamily: "Pixelify Sans",
                 }}
               >
-                {formatText(appContext.loadedCard.properties.title, 20)}
+                {appContext.loadedCard.properties.title}
               </p>
             )}
           </div>
@@ -107,9 +107,9 @@ export const CardPreview = () => {
                       borderColor:
                         appContext.currentTrack == index ? "#FFF" : "#1E1E1E",
                     }}
-                    className="border-b-[1px]"
+                    className="border-b-[1px] whitespace-nowrap overflow-hidden overflow-ellipsis"
                   >
-                    {formatText(String(index + 1) + " ~ " + song.title, 20)}
+                    {String(index + 1) + " ~ " + song.title}
                   </div>
                 );
               },

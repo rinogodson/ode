@@ -13,6 +13,7 @@ import { useDropzone } from "react-dropzone";
 import { pauseFn, playFn, seekFn } from "./services/serviceProvider";
 import { AnimatePresence } from "framer-motion";
 import { Pencil, Plus } from "lucide-react";
+import SlipPopUp from "./components/SlipPopUp/SlipPopUp";
 
 function App() {
   return (
@@ -110,45 +111,54 @@ function AppWithContext() {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === " ") {
-        event.preventDefault();
-        if (appContext.playerState === "PLAYING") {
-          pauseFn();
+      if (!showCrafter && !SlipPopUp) {
+        if (event.key === " ") {
+          event.preventDefault();
+          if (appContext.playerState === "PLAYING") {
+            pauseFn();
+          }
+          if (
+            appContext.playerState === "PAUSED" ||
+            appContext.playerState === "UNSTARTED"
+          ) {
+            playFn();
+          }
         }
-        if (
-          appContext.playerState === "PAUSED" ||
-          appContext.playerState === "UNSTARTED"
-        ) {
-          playFn();
+        if (event.key === "l") {
+          setAppContext((prev: any) => {
+            const maxIndex = prev.loadedCard.songs.length - 1;
+            const newIndex = Math.min(prev.currentTrack + 1, maxIndex);
+            return {
+              ...prev,
+              currentTrack: newIndex,
+            };
+          });
         }
-      } else if (event.key === "l") {
-        setAppContext((prev: any) => {
-          const maxIndex = prev.loadedCard.songs.length - 1;
-          const newIndex = Math.min(prev.currentTrack + 1, maxIndex);
-          return {
-            ...prev,
-            currentTrack: newIndex,
-          };
-        });
-      } else if (event.key === "h") {
-        setAppContext((prev: any) => {
-          const maxIndex = prev.loadedCard.songs.length - 1;
-          const newIndex = Math.min(prev.currentTrack - 1, maxIndex);
-          return {
-            ...prev,
-            currentTrack: newIndex < 0 ? 0 : newIndex,
-          };
-        });
-      } else if (event.key === "j") {
-        seekFn(timestamp.current - 10);
-      } else if (event.key === "k") {
-        seekFn(timestamp.current + 10);
-      } else if (event.key === "o") {
-        setPulled((prev) => !prev);
-      } else if (event.key === "c") {
-        setInitVal(null);
-        setShowCrafter(true);
-      } else if (event.key === "Escape") {
+        if (event.key === "h") {
+          setAppContext((prev: any) => {
+            const maxIndex = prev.loadedCard.songs.length - 1;
+            const newIndex = Math.min(prev.currentTrack - 1, maxIndex);
+            return {
+              ...prev,
+              currentTrack: newIndex < 0 ? 0 : newIndex,
+            };
+          });
+        }
+        if (event.key === "j") {
+          seekFn(timestamp.current - 10);
+        }
+        if (event.key === "k") {
+          seekFn(timestamp.current + 10);
+        }
+        if (event.key === "o") {
+          setPulled((prev) => !prev);
+        }
+        if (event.key === "c") {
+          setInitVal(null);
+          setShowCrafter(true);
+        }
+      }
+      if (event.key === "Escape") {
         setShowCrafter(false);
       }
     };
@@ -158,7 +168,14 @@ function AppWithContext() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [appContext.playerState, pauseFn, playFn]);
+  }, [
+    appContext.playerState,
+    pauseFn,
+    playFn,
+    seekFn,
+    showCrafter,
+    setAppContext,
+  ]);
 
   return (
     <>
@@ -182,7 +199,7 @@ function AppWithContext() {
           </button>
           <button
             {...getRootProps()}
-            className="flex justify-center items-center gap-3 px-4 pr-4 cursor-pointer bg-linear-to-b from-[white] to-[rgba(200,200,200)] text-[#010101] py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
+            className="flex justify-center items-center gap-3 px-4 pr-4 cursor-pointer bg-linear-to-b from-[white] to-[rgba(200,200,200)] border-[1px] border-[rgba(0,0,0,0.4)]  text-[#010101] py-2 text-[1.2em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
             <Pencil size={20} />
             Edit

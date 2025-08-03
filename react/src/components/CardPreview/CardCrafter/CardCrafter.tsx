@@ -453,10 +453,11 @@ const CardPreviewCardCrafter = ({
                   crafterContext.inputCard.properties.blur - 1
                 ] ? (
                   <img
-                    src={`https://img.youtube.com/vi/${crafterContext.inputCard.songs[
+                    src={`https://img.youtube.com/vi/${
+                      crafterContext.inputCard.songs[
                         crafterContext.inputCard.properties.blur - 1
                       ].id
-                      }/0.jpg`}
+                    }/0.jpg`}
                     alt="Song Thumbnail"
                     className="w-full h-full object-cover blur-[1em] block brightness-50"
                   />
@@ -480,12 +481,12 @@ const CardPreviewCardCrafter = ({
               </p>
             ) : (
               <p
-                className="flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white"
+                className="whitespace-nowrap overflow-hidden overflow-ellipsis flex w-full h-fit justify-start items-end text-[1.2em] absolute bottom-0 left-0 p-2 text-white"
                 style={{
                   fontFamily: "Pixelify Sans",
                 }}
               >
-                {formatText(crafterContext.inputCard.properties.title, 20)}
+                {crafterContext.inputCard.properties.title}
               </p>
             )}
           </div>
@@ -520,9 +521,9 @@ const CardPreviewCardCrafter = ({
                       color: "#FFF",
                       borderColor: "#888",
                     }}
-                    className="border-b-[1px]"
+                    className="border-b-[1px] whitespace-nowrap overflow-hidden overflow-ellipsis"
                   >
-                    {formatText(String(index + 1) + " ~ " + song.title, 20)}
+                    {String(index + 1) + " ~ " + song.title}
                   </div>
                 );
               },
