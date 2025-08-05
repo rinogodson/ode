@@ -1,5 +1,4 @@
 import { LoadedCard } from "@/services/ContextService";
-import { formatText } from "@/services/serviceProvider";
 import { Ellipsis } from "lucide-react";
 import { useContext, useState } from "react";
 import { Tooltip } from "react-tooltip";
