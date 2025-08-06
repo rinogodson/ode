@@ -1,3 +1,4 @@
+import Fuse from "fuse.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Plus, Trash2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -77,6 +78,15 @@ function SlipPopUp() {
     setSlips(newSlips);
   };
 
+  const fuse = new Fuse(slips, {
+    keys: ["name"],
+    threshold: 0.3,
+  });
+
+  const filteredSlips = searchQuery.trim()
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : slips;
+
   return (
     <motion.div
       initial={{
@@ -132,7 +142,7 @@ function SlipPopUp() {
               transition={{ duration: 0.1 }}
               className="m-0 p-0 w-full"
             >
-              {slips.map(
+              {filteredSlips.map(
                 (
                   slip: {
                     name: string;
@@ -141,6 +151,8 @@ function SlipPopUp() {
                   index: number,
                 ) => (
                   <motion.div
+                    onMouseEnter={() => setHoveringThing(index)}
+                    onMouseLeave={() => setHoveringThing(null)}
                     layout
                     initial={{ scaleY: 0 }}
                     animate={{ scaleY: 1, transformOrigin: "top" }}
@@ -149,73 +161,66 @@ function SlipPopUp() {
                       fontFamily: "IBM Plex Sans",
                     }}
                     key={slip.name}
-                    className="flex justify-between no-scrollbar items-center text-white border-b-1 border-[rgba(255,255,255,0.1)] w-full text-[0.8em] hover:bg-[rgba(255,255,255,0.07)] cursor-pointer"
+                    className="grid grid-cols-[2em_auto_auto] grid-rows-[2em] w-full no-scrollbar items-center text-white border-b-1 border-[rgba(255,255,255,0.1)] text-[0.8em] hover:bg-[rgba(255,255,255,0.05)] cursor-pointer"
                   >
-                    <div className="flex h-full justify-center items-center">
-                      <div className="flex justify-center items-center h-full w-10">
-                        <CheckMark
-                          checked={slip.songs.some(
-                            (song) =>
-                              song.id ===
-                              appContext.loadedCard.songs[
-                                appContext.currentTrack
-                              ]?.id,
-                          )}
-                          onCheckFn={() => {
-                            const currentSong =
-                              appContext.loadedCard.songs[
-                                appContext.currentTrack
-                              ];
-                            const isAlreadyInSlip = slip.songs.some(
-                              (song) => song.id === currentSong?.id,
-                            );
+                    <CheckMark
+                      checked={slip.songs.some(
+                        (song) =>
+                          song.id ===
+                          appContext.loadedCard.songs[appContext.currentTrack]
+                            ?.id,
+                      )}
+                      onCheckFn={() => {
+                        const currentSong =
+                          appContext.loadedCard.songs[appContext.currentTrack];
+                        const isAlreadyInSlip = slip.songs.some(
+                          (song) => song.id === currentSong?.id,
+                        );
 
-                            if (isAlreadyInSlip) {
-                              deleteSong(currentSong, index);
-                            } else {
-                              addSong(currentSong, index);
-                            }
-                          }}
-                        />
+                        if (isAlreadyInSlip) {
+                          deleteSong(currentSong, index);
+                        } else {
+                          addSong(currentSong, index);
+                        }
+                      }}
+                    />
+                    <div
+                      onClick={() => {
+                        setPreviewPageOpts(() => ({
+                          show: true,
+                          index: index,
+                        }));
+                      }}
+                      className="flex justify-start items-center h-full my-2"
+                    >
+                      <div className="whitespace-nowrap overflow-hidden overflow-ellipsis w-53">
+                        {slip.name}
                       </div>
-                      <div
-                        onMouseEnter={() => setHoveringThing(index)}
-                        onMouseLeave={() => setHoveringThing(null)}
-                        onClick={() => {
-                          setPreviewPageOpts(() => ({
-                            show: true,
-                            index: index,
-                          }));
-                        }}
-                        className="flex justify-center items-center h-full my-2"
-                      >
-                        <div className="whitespace-nowrap overflow-hidden overflow-ellipsis w-53">
-                          {slip.name}
-                        </div>
-                        <ChevronRight
-                          className="transition-all duration-200 text-[rgba(255,255,255,0.3)]"
-                          style={{
-                            transform:
-                              hoveringThing === index
-                                ? "translate(0px, 0px)"
-                                : "translate(-10px,0)",
-                          }}
-                        />
-                      </div>
+                    </div>
+                    <motion.div
+                      key={slip.name + "list"}
+                      className="flex justify-between items-center gap-1 h-full w-[3em]"
+                    >
                       <p
-                        style={{ fontFamily: "Instrument Serif" }}
-                        className="text-[rgba(255,255,255,0.5)]"
+                        style={{ fontFamily: "IBM Plex Sans" }}
+                        className="text-[rgba(255,255,255,0.5)] w-[1em] border-l-1 border-[rgba(255,255,255,0.1)] h-full pl-5 flex justify-center items-center"
                       >
                         {slip.songs.length}
                       </p>
-                    </div>
-                    <Trash2
-                      size={20}
-                      className="transition-all duration-300 hover:scale-130 hover:text-red-400 active:scale-100 h-full aspect-square mr-3"
-                      onClick={() => {
-                        deleteSlip(index);
-                      }}
-                    />
+                      {!(hoveringThing === index) ? (
+                        <ChevronRight className="w-[1em] transition-all duration-200 text-[rgba(255,255,255,0.3)] flex justify-center items-center" />
+                      ) : (
+                        <div className="w-[1em]">
+                          <Trash2
+                            size={20}
+                            className="transition-all text-[#595E5F] duration-300 hover:scale-130 hover:text-red-400 active:scale-100 h-full aspect-square mr-3 flex justify-center items-center"
+                            onClick={() => {
+                              deleteSlip(index);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </motion.div>
                   </motion.div>
                 ),
               )}

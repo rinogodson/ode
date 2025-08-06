@@ -8,7 +8,7 @@ const CheckMark = ({
   checked: boolean;
 }) => {
   return (
-    <>
+    <div className="w-full h-full flex justify-center items-center">
       <div
         style={{
           border: checked
@@ -25,7 +25,7 @@ const CheckMark = ({
           className={checked ? "text-[rgba(0,0,0,1)]" : "text-[#404141]"}
         />
       </div>
-    </>
+    </div>
   );
 };
 
