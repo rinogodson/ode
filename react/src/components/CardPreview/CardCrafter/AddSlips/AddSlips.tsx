@@ -25,7 +25,7 @@ function AddSlips({ setCrafterContext }: { setCrafterContext: Function }) {
       animate={{ scaleY: 1, opacity: 1, transformOrigin: "bottom" }}
       exit={{ scaleY: 0, opacity: 0 }}
       transition={{ duration: 0.3, type: "spring", bounce: 0.2 }}
-      className="flex justify-center items-center absolute w-60 h-60 bg-[rgba(0,0,0,0.4)] translate-y-[-9rem] rounded-[1.5em] border-1 border-[rgba(255,255,255,0.1)] backdrop-blur-[30px]"
+      className="flex justify-center items-center absolute w-60 h-60 bg-[rgba(0,0,0,0.4)] translate-x-[1rem] translate-y-[-9rem] rounded-[1.5em] border-1 border-[rgba(255,255,255,0.1)] backdrop-blur-[30px]"
     >
       <div className="flex flex-col w-[90%] h-[90%] bg-[rgba(255,255,255,0.01)] rounded-[0.8em] overflow-hidden border-1 border-[rgba(255,255,255,0.1)]">
         <AnimatePresence mode="wait">

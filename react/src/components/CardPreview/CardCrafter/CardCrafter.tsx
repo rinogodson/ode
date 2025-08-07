@@ -236,8 +236,9 @@ function CardCrafter({
         >
           <div
             id="list"
-            className="pb-[3em] border-b-1 border-b-[rgba(255,255,255,0.1)] flex flex-col gap-3 overflow-x-hidden overflow-y-scroll"
+            className="pb-[5em] flex flex-col gap-3 overflow-x-hidden overflow-y-scroll"
           >
+            <div className="w-[31em] translate-x-[-1.25em] translate-y-[22em] h-[4em] absolute bg-linear-to-t from-[#131313]"></div>
             <DndContext
               collisionDetection={closestCorners}
               onDragEnd={handleDragEnd}
@@ -248,25 +249,39 @@ function CardCrafter({
               >
                 <Tooltip id={"crafter-tip"} />
                 <Tooltip id={"card-tip"} className="z-10000 scale-80" />
-                {crafterContext.inputCard.songs.map(
-                  (song: { title: string; id: string }, index: number) => {
-                    return (
-                      <ListComponent
-                        key_name={song.id}
-                        id={song.id}
-                        name={song.title}
-                        setFn={setCrafterContext}
-                        crafterContext={crafterContext}
-                        index={index}
-                      />
-                    );
-                  },
-                )}
+                <AnimatePresence>
+                  {crafterContext.inputCard.songs.map(
+                    (song: { title: string; id: string }, index: number) => {
+                      return (
+                        <motion.div
+                          layout
+                          key={song.id}
+                          initial={{ scaleY: 0, opacity: 0 }}
+                          animate={{
+                            scaleY: 1,
+                            opacity: 1,
+                            transformOrigin: "top",
+                          }}
+                          exit={{ scaleY: 0, opacity: 0 }}
+                        >
+                          <ListComponent
+                            key_name={song.id}
+                            id={song.id}
+                            name={song.title}
+                            setFn={setCrafterContext}
+                            crafterContext={crafterContext}
+                            index={index}
+                          />
+                        </motion.div>
+                      );
+                    },
+                  )}
+                </AnimatePresence>
               </SortableContext>
             </DndContext>
           </div>
           <div>
-            <div className="h-[4em] flex justify-start items-center overflow-hidden">
+            <div className="h-[4em] flex justify-end items-center overflow-hidden">
               <AnimatePresence>
                 {showAddSlips && (
                   <AddSlips setCrafterContext={setCrafterContext} />
