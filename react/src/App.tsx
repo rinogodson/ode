@@ -167,7 +167,7 @@ function AppWithContext() {
 
           <button
             onClick={() => {
-              window.open("https://youtu.be/pAlP9_FqU5M", "_blank");
+              window.open("https://youtu.be/trA2f3YDoRk", "_blank");
             }}
             className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
           >
@@ -209,7 +209,7 @@ function AppWithContext() {
         </div>
         <button
           onClick={() => {
-            window.open("https://youtu.be/pAlP9_FqU5M", "_blank");
+            window.open("https://youtu.be/trA2f3YDoRk", "_blank");
           }}
           className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,1)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
         >
