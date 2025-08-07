@@ -60,17 +60,13 @@ function AppWithContext() {
 
   const onDrop = useCallback(async (receivedCard: File[]) => {
     if (receivedCard.length > 1) return;
-
     const file = receivedCard[0];
-
     const readFileAsText = (file: File): Promise<string> => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
         reader.onabort = () => reject(new Error("File reading was aborted"));
         reader.onerror = () => reject(new Error("File reading failed"));
         reader.onload = () => resolve(String(reader.result));
-
         reader.readAsText(file);
       });
     };
