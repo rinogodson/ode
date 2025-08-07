@@ -19,8 +19,6 @@ function download(filename: string, text: string) {
 const ytSetup = (yt_ref: React.RefObject<HTMLIFrameElement> | React.RefObject<null>) => {
   if (!yt_ref.current) return;
   ytElement = new YouTubeIFrameCtrl(yt_ref.current);
-  //  ytElement.command("loadVideoById", [appContext.loadedCard.songs[appContext.currentTrack].id])
-  //
 };
 
 const fetchYouTubeTitle = async (link: string)=>{
@@ -50,7 +48,6 @@ const playFn = () => {
 const pauseFn = () => {
   ytElement.pause();
 };
-
 
 const seekFn = (seconds: number) => {
   ytElement.command("seekTo", [seconds]);
