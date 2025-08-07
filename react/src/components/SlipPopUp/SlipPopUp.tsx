@@ -1,11 +1,34 @@
 import Fuse from "fuse.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Plus, Trash2 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SlipPreview from "./SlipPreview/SlipPreview";
 import CheckMark from "./CheckMark/CheckMark";
 import { LoadedCard } from "@/services/ContextService";
-function SlipPopUp() {
+function SlipPopUp({
+  showSlipPopUp,
+  setShowSlipPopUp,
+}: {
+  showSlipPopUp: boolean;
+  setShowSlipPopUp: Function;
+}) {
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+        setShowSlipPopUp(false);
+      }
+    };
+    if (showSlipPopUp) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSlipPopUp]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [slips, setSlips] = useState<
     { name: string; songs: { title: string; id: string }[] }[]
@@ -89,6 +112,7 @@ function SlipPopUp() {
 
   return (
     <motion.div
+      ref={popupRef}
       initial={{
         opacity: 0,
         transform: "translate(-6.25rem,-100%) scale(0)",

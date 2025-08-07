@@ -7,15 +7,16 @@ import {
   formatText,
 } from "@/services/serviceProvider";
 import type { cardContextType } from "@/services/types";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { AArrowDown, BadgeX, Copy, Ellipsis, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import AddSlips from "./AddSlips/AddSlips";
 interface CrafterContextType {
   link: string;
   title: string;
@@ -29,6 +30,7 @@ function CardCrafter({
   setShowCrafter: Function;
   initVal: cardContextType | null;
 }) {
+  const [showAddSlips, setShowAddSlips] = useState(false);
   const style = {
     buttonStyle:
       "bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center transition-[all_100ms] active:scale-[0.9] hover:bg-[#2b2b2b] hover:scale-[0.99] cursor-pointer",
@@ -49,6 +51,29 @@ function CardCrafter({
       songs: [],
     },
   });
+
+  useEffect(() => {
+    setCrafterContext((prev) => {
+      const uniqueSongsMap = new Map();
+      const filteredSongs = prev.inputCard.songs.filter((song) => {
+        if (uniqueSongsMap.has(song.id)) return false;
+        uniqueSongsMap.set(song.id, true);
+        return true;
+      });
+
+      if (filteredSongs.length !== prev.inputCard.songs.length) {
+        return {
+          ...prev,
+          inputCard: {
+            ...prev.inputCard,
+            songs: filteredSongs,
+          },
+        };
+      }
+
+      return prev;
+    });
+  }, [crafterContext.inputCard.songs]);
 
   const getID = (url: string | null) => {
     if (typeof url !== "string") {
@@ -207,7 +232,7 @@ function CardCrafter({
         </div>
         <div
           id="songcreationsection"
-          className={`grid grid-cols-1 p-5 gap-3 grid-rows-[1fr_10em] w-full h-full [grid-area:1/2/3/3] ${sectionStyles}`}
+          className={`grid grid-cols-1 p-5 grid-rows-[1fr_14em] w-full h-full [grid-area:1/2/3/3] ${sectionStyles}`}
         >
           <div
             id="list"
@@ -240,97 +265,112 @@ function CardCrafter({
               </SortableContext>
             </DndContext>
           </div>
-          <div
-            id="input"
-            className="grid gap-3 grid-rows-[1fr_1fr] grid-cols-[1fr_5em]"
-          >
-            <input
-              placeholder="Enter the link here"
-              type="text"
-              className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:1/1/2/2]"
-              value={String(crafterContext.link)}
-              onChange={(e) => {
-                setCrafterContext({
-                  ...crafterContext,
-                  link: e.target.value,
-                });
-              }}
-            />
-            <input
-              placeholder="Title... you can fetch it >>>"
-              type="text"
-              className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:2/1/3/2]"
-              value={crafterContext.title}
-              onChange={(e) => {
-                setCrafterContext({
-                  ...crafterContext,
-                  title: e.target.value,
-                });
-              }}
-            />
-            <button
-              onClick={() => {
-                if (!valid(crafterContext.link) || !crafterContext.title) {
-                  window.alert("Invalid Link / No Title");
-                  return;
-                }
-                const existingSongIndex =
-                  crafterContext.inputCard.songs.findIndex(
-                    (song) => song.id === getID(crafterContext.link),
-                  );
-                if (existingSongIndex !== -1) {
-                  const updatedSongs = [...crafterContext.inputCard.songs];
-                  updatedSongs[existingSongIndex] = {
-                    title: crafterContext.title,
-                    id: getID(crafterContext.link) || "",
-                  };
+          <div>
+            <div className="h-[4em] flex justify-start items-center overflow-hidden">
+              <AnimatePresence>
+                {showAddSlips && (
+                  <AddSlips setCrafterContext={setCrafterContext} />
+                )}
+              </AnimatePresence>
+              <button
+                onClick={() => setShowAddSlips(!showAddSlips)}
+                className="bg-[rgba(255,255,255,0.1)] px-3 py-1 rounded-[0.4em] hover:bg-[rgba(255,255,255,0.2)] active:bg-[rgba(255,255,255,0.07)] transition-all duration-75 "
+              >
+                Add Songs from Slips
+              </button>
+            </div>
+            <div
+              id="input"
+              className="h-[10em] grid gap-3 grid-rows-[1fr_1fr] grid-cols-[1fr_5em]"
+            >
+              <input
+                placeholder="Enter the link here"
+                type="text"
+                className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:1/1/2/2]"
+                value={String(crafterContext.link)}
+                onChange={(e) => {
+                  setCrafterContext({
+                    ...crafterContext,
+                    link: e.target.value,
+                  });
+                }}
+              />
+              <input
+                placeholder="Title... you can fetch it >>>"
+                type="text"
+                className="border-3 border-[#3b3b3b] rounded-2xl focus:border-[#515151] outline-none px-5 text-[1.7em] w-full h-full [grid-area:2/1/3/2]"
+                value={crafterContext.title}
+                onChange={(e) => {
+                  setCrafterContext({
+                    ...crafterContext,
+                    title: e.target.value,
+                  });
+                }}
+              />
+              <button
+                onClick={() => {
+                  if (!valid(crafterContext.link) || !crafterContext.title) {
+                    window.alert("Invalid Link / No Title");
+                    return;
+                  }
+                  const existingSongIndex =
+                    crafterContext.inputCard.songs.findIndex(
+                      (song) => song.id === getID(crafterContext.link),
+                    );
+                  if (existingSongIndex !== -1) {
+                    const updatedSongs = [...crafterContext.inputCard.songs];
+                    updatedSongs[existingSongIndex] = {
+                      title: crafterContext.title,
+                      id: getID(crafterContext.link) || "",
+                    };
+                    setCrafterContext({
+                      ...crafterContext,
+                      link: "",
+                      title: "",
+                      inputCard: {
+                        ...crafterContext.inputCard,
+                        songs: updatedSongs,
+                      },
+                    });
+                    return;
+                  }
                   setCrafterContext({
                     ...crafterContext,
                     link: "",
                     title: "",
                     inputCard: {
                       ...crafterContext.inputCard,
-                      songs: updatedSongs,
+                      songs: [
+                        ...crafterContext.inputCard.songs,
+                        {
+                          title: crafterContext.title,
+                          id: getID(crafterContext.link) || "",
+                        },
+                      ],
                     },
                   });
-                  return;
-                }
-                setCrafterContext({
-                  ...crafterContext,
-                  link: "",
-                  title: "",
-                  inputCard: {
-                    ...crafterContext.inputCard,
-                    songs: [
-                      ...crafterContext.inputCard.songs,
-                      {
-                        title: crafterContext.title,
-                        id: getID(crafterContext.link) || "",
-                      },
-                    ],
-                  },
-                });
-              }}
-              className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
-            >
-              <Plus size={35} />
-            </button>
-            <button
-              onClick={async () => {
-                const title = await fetchYouTubeTitle(
-                  String(getID(crafterContext.link)),
-                );
-                if (title) {
-                  setCrafterContext({
-                    ...crafterContext,
-                    title: title,
-                  });
-                }
-              }}
-              className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
-            >
-              <AArrowDown size={35} />{" "}
-            </button>
+                }}
+                className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
+              >
+                <Plus size={35} />
+              </button>
+              <button
+                onClick={async () => {
+                  const title = await fetchYouTubeTitle(
+                    String(getID(crafterContext.link)),
+                  );
+                  if (title) {
+                    setCrafterContext({
+                      ...crafterContext,
+                      title: title,
+                    });
+                  }
+                }}
+                className="bg-[#1b1b1b] border-1 border-[#2b2b2b] rounded-full flex justify-center items-center hover:border-6 active:scale-[0.9] active:border-10 transition-[all_100ms]"
+              >
+                <AArrowDown size={35} />{" "}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -374,7 +414,7 @@ const ListComponent = ({
       <div className="w-full flex justify-between items-center bg-[rgba(0,0,0,0.6)] px-6 rounded-[3em] border-3 border-[rgba(255,255,255,0.1)]">
         <p
           {...listeners}
-          className="text-[#888] py-5 text-[1.5em] w-full overflow-scroll"
+          className="text-[#888] py-5 text-[1.5em] w-full whitespace-nowrap overflow-hidden overflow-ellipsis "
         >
           {formatText(name, 28)}
         </p>
