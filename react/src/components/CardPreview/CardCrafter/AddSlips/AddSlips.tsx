@@ -61,7 +61,7 @@ function AddSlips({ setCrafterContext }: { setCrafterContext: Function }) {
               animate={{ x: "0", opacity: 1 }}
               exit={{ x: "-40px", opacity: 0 }}
               transition={{ duration: 0.1 }}
-              className="h-full"
+              className="h-full overflow-scroll"
             >
               {slips.map((slip, index) => (
                 <div
