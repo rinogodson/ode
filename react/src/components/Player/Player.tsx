@@ -191,7 +191,14 @@ function Player({
             )}
           </p>
           <div className="[grid-area:_1_/_2_/_3_/_3]">
-            <AnimatePresence>{showSlipPopUp && <SlipPopUp showSlipPopUp={showSlipPopUp} setShowSlipPopUp={setShowSlipPopUp} />}</AnimatePresence>
+            <AnimatePresence>
+              {showSlipPopUp && (
+                <SlipPopUp
+                  showSlipPopUp={showSlipPopUp}
+                  setShowSlipPopUp={setShowSlipPopUp}
+                />
+              )}
+            </AnimatePresence>
             <img
               src="./Vector.svg"
               width={"80%"}

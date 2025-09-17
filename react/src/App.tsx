@@ -160,15 +160,6 @@ function AppWithContext() {
       <>
         <LoadingScreen>
           <p>USE A DESKTOP NO PHONES ALLOWED!</p>
-
-          <button
-            onClick={() => {
-              window.open("https://youtu.be/trA2f3YDoRk", "_blank");
-            }}
-            className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,0.5)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
-          >
-            Watch The DEMO Instead
-          </button>
         </LoadingScreen>
       </>
     );
@@ -203,14 +194,6 @@ function AppWithContext() {
             <input {...getInputProps()} />
           </button>
         </div>
-        <button
-          onClick={() => {
-            window.open("https://youtu.be/trA2f3YDoRk", "_blank");
-          }}
-          className="absolute z-2000000 top-[2em] right-[2em] border-1 border-[rgba(255,255,255,1)] text-[#FFF] px-4 py-2 text-[1em] rounded-[10px] hover:scale-[1.2] active:scale-[0.95] transition-[all_300ms]"
-        >
-          DEMO / Don't know how to use it? click here!
-        </button>
         <CardPreview />
         <div className="flex justify-center items-end flex-col">
           {appContext.playerState === "CUED" && (
